@@ -41,19 +41,6 @@
   const fab = document.querySelector('.wa-fab');
   const heroEl = document.getElementById('hero');
 
-  /* ---------- lazy 3D crystal (only when the contact section is near) ---------- */
-  const gem = document.getElementById('gem');
-  const lowPower = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ''));
-  if (gem && !reduce && !lowPower && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(es => {
-      if (es[0].isIntersecting) {
-        io.disconnect();
-        import('./crystal.js').then(m => m.startCrystal(gem)).catch(() => {});
-      }
-    }, { rootMargin: '600px 0px' });
-    io.observe(gem);
-  }
-
   // the hero has its own CTAs, so the floating button appears only after it
   const fabCheck = () => fab.classList.toggle('is-hidden', heroEl.getBoundingClientRect().bottom > innerHeight * 1.05);
   fab.classList.add('is-hidden');
@@ -113,10 +100,6 @@
     gsap.from('.card', {
       y: 40, opacity: 0, duration: 0.8, stagger: 0.09, ease: 'power3.out',
       scrollTrigger: { trigger: '#rail', start: 'top 88%', once: true }
-    });
-    gsap.fromTo('#gem', { yPercent: 8 }, {
-      yPercent: -8, ease: 'none',
-      scrollTrigger: { trigger: '#contact', start: 'top bottom', end: 'bottom top', scrub: true }
     });
     ScrollTrigger.refresh();
   });

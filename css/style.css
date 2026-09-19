@@ -190,9 +190,7 @@ a{color:inherit;text-decoration:none}
 .qa[open] summary::after{rotate:45deg}
 .qa p{padding:0 20px 20px;font-weight:300;line-height:1.8;color:var(--ice)}
 
-.sec--contact{overflow:hidden;padding:330px 0 110px;background:radial-gradient(80% 60% at 50% 30%,#3a2262 0,var(--night) 70%)}
-.gem{position:absolute;inset:20px 0 auto 0;width:100%;height:320px;opacity:0;transition:opacity 1.2s;pointer-events:none}
-.gem.is-on{opacity:1}
+.sec--contact{overflow:hidden;padding:96px 0 110px;background:radial-gradient(80% 60% at 50% 30%,#3a2262 0,var(--night) 70%)}
 .btn--ghost-light{border:1.5px solid rgba(237,228,255,.45);color:#fff;background:rgba(255,255,255,.06);backdrop-filter:blur(6px);direction:ltr}
 
 /* contact card */
@@ -248,11 +246,10 @@ a{color:inherit;text-decoration:none}
   .sec--about .lead,.sec--ein .prose p{margin-inline:auto}
   .chips,.stats{justify-content:center}
   .stats{gap:64px}
-  .sec--contact{padding-top:430px}
+  .sec--contact{padding-top:120px}
   .cbox:not(.no-map){grid-template-columns:1fr 1fr;min-height:480px}
   .cbox__info{padding:48px 44px;justify-content:center}
   .cbox__map{min-height:0}
-  .gem{height:420px;inset-block-start:30px}
   .card{flex-basis:340px}
   .rail{padding-inline:max(var(--gutter),calc((100vw - 1080px)/2))}
   .railnav{display:flex;gap:10px;justify-content:flex-start;width:min(100% - 2*var(--gutter),1080px);margin:6px auto 0}
@@ -270,7 +267,6 @@ a{color:inherit;text-decoration:none}
   .hero__copy{opacity:1;transform:none}
   .hero__glow{opacity:1}
   .hero__hint span{animation:none}
-  .gem{display:none}
   .t-wrap{height:auto}
   .t-fade{display:none}
   *{scroll-behavior:auto!important}
