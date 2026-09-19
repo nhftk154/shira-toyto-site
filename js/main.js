@@ -1,6 +1,7 @@
 (() => {
   const FRAMES = 60;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) document.getElementById('animToggle').hidden = true;
   const src = i => `assets/frames/f${String(i + 1).padStart(3, '0')}.jpg`;
 
   /* ---------- frame sequence (hero logo reveal) ---------- */
@@ -104,30 +105,50 @@
     ScrollTrigger.refresh();
   });
 
-  /* ---------- gentle gold sparks ---------- */
+  /* ---------- gold stardust: soft glowing dots + a few large blurred "bokeh" lights, gathered around the eye ---------- */
   const sc = document.getElementById('sparks');
   const sx = sc.getContext('2d');
+  const sprite = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 64;
+    const g = c.getContext('2d');
+    const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(240,205,130,1)');
+    gr.addColorStop(0.35, 'rgba(217,178,111,.6)');
+    gr.addColorStop(1, 'rgba(217,178,111,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+    return c;
+  })();
   let W, H, parts = [];
   let heroVisible = true;
   new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe(heroEl);
+  const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
   const fit = () => {
     const d = Math.min(devicePixelRatio || 1, 2);
     W = sc.width = sc.clientWidth * d; H = sc.height = sc.clientHeight * d;
-    parts = Array.from({ length: innerWidth < 700 ? 22 : 44 }, () => ({
-      x: Math.random() * W, y: Math.random() * H, r: (Math.random() * 1.6 + .6) * d,
-      v: (Math.random() * .25 + .08) * d, a: Math.random() * Math.PI * 2, s: Math.random() * .02 + .008
-    }));
+    const n = innerWidth < 700 ? 26 : 46;
+    parts = Array.from({ length: n }, (_, i) => {
+      const bokeh = i % 6 === 0;
+      const near = Math.random() < 0.65;   // most dust gathers around the eye, the rest drifts across the page
+      return {
+        x: near ? W / 2 + gauss() * W * 0.32 : Math.random() * W,
+        y: near ? H * 0.42 + gauss() * H * 0.3 : Math.random() * H,
+        size: (bokeh ? 34 + Math.random() * 40 : 8 + Math.random() * 14) * d,
+        peak: bokeh ? 0.16 + Math.random() * 0.1 : 0.55 + Math.random() * 0.35,
+        v: (Math.random() * .22 + .06) * d, sway: (Math.random() - .5) * .25 * d,
+        a: Math.random() * Math.PI * 2, s: Math.random() * .018 + .006
+      };
+    });
   };
   fit(); addEventListener('resize', fit);
   const tick = () => {
     if (heroVisible) {
       sx.clearRect(0, 0, W, H);
       for (const p of parts) {
-        p.y -= p.v; p.a += p.s;
-        if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
-        sx.globalAlpha = (Math.sin(p.a) * .5 + .5) * .55;
-        sx.fillStyle = '#D9B26F';
-        sx.beginPath(); sx.arc(p.x, p.y, p.r, 0, 6.283); sx.fill();
+        p.y -= p.v; p.x += p.sway; p.a += p.s;
+        if (p.y < -p.size) { p.y = H + p.size; p.x = Math.random() * W; }
+        sx.globalAlpha = (Math.sin(p.a) * .5 + .5) * p.peak;
+        sx.drawImage(sprite, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
       }
     }
     requestAnimationFrame(tick);

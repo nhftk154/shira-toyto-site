@@ -249,6 +249,14 @@ collections:
             multiple: true
             required: false
             hint: "כאן אפשר להוסיף/להחליף תמונה אחת. להעלאת כמה תמונות בבת אחת יש כלי נפרד: הכפתור הסגול בפינה, או admin/bulk-images.html"
+          - label: "תיאור לכל תמונה (נגישות, חובה לפי תקן)"
+            name: "descriptions"
+            widget: "list"
+            required: false
+            hint: "לכל תמונה שהועלתה: בוחרים אותה וכותבים משפט קצר שמתאר מה רואים (למשל: חדר הטיפולים עם כורסאות וכריות). לא לציין שמות ילדים. תמונה קישוטית בלבד אפשר להשאיר בלי תיאור."
+            fields:
+              - { label: "תמונה", name: "image", widget: "image" }
+              - { label: "תיאור התמונה", name: "alt", widget: "string" }
 
   - name: "videos"
     label: "סרטונים"

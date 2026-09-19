@@ -53,10 +53,15 @@ window.contentReady = (async () => {
     document.querySelectorAll('[data-phone-text]').forEach(a => { a.textContent = contact.phoneDisplay || contact.phone; });
     document.querySelectorAll('[data-i="address"]').forEach(a => { a.textContent = contact.address || ''; });
 
-    // map (Google Maps embed, no API key); shows the area only, e.g. a city name
+    // map: Google Maps loads only after the visitor clicks (no Google request or cookies before that)
     const mq = (contact.mapQuery || '').trim();
     if (mq) {
-      $('mapFrame').src = `https://maps.google.com/maps?q=${encodeURIComponent(mq)}&z=15&hl=he&output=embed`;
+      $('mapExt').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mq)}`;
+      $('mapLoad').onclick = () => {
+        $('mapFrame').src = `https://maps.google.com/maps?q=${encodeURIComponent(mq)}&z=15&hl=he&output=embed`;
+        $('mapFrame').hidden = false;
+        $('mapGate').hidden = true;
+      };
       $('mapBox').hidden = false;
     } else {
       $('cbox').classList.add('no-map');
@@ -72,6 +77,7 @@ window.contentReady = (async () => {
     c.append(el('span', 'card__n', String(i + 1).padStart(2, '0')), el('h3', null, t.title), el('p', null, t.description));
     if (t.waText) {
       const a = el('a', 'card__cta', 'לפרטים');
+      a.append(el('span', 'sr', ` על ${t.title} (נפתח בחלון חדש)`));
       a.href = waLink(t.waText); a.target = '_blank'; a.rel = 'noopener';
       c.append(a);
     }
@@ -131,10 +137,12 @@ window.contentReady = (async () => {
 
   /* ---- gallery (hidden until images exist) ---- */
   const g = items(gallery).filter(Boolean);
+  const altOf = {};
+  ((gallery && gallery.descriptions) || []).forEach(d => { if (d && d.image) altOf[url(d.image)] = d.alt || ''; });
   g.forEach(p => {
     const f = el('figure', 'gal__i reveal');
     const im = document.createElement('img');
-    im.src = url(p); im.alt = 'רגע מהקליניקה'; im.loading = 'lazy'; im.decoding = 'async';
+    im.src = url(p); im.alt = altOf[url(p)] || ''; im.loading = 'lazy'; im.decoding = 'async';
     f.append(im);
     $('galGrid').append(f);
   });
