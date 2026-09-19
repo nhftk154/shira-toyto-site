@@ -2,6 +2,7 @@
   // phones get a lighter sequence (30 frames at 540px, about a third of the download)
   const SMALL = matchMedia('(max-width: 699px)').matches;
   const FRAMES = SMALL ? 30 : 60;
+  const START = Math.round((FRAMES - 1) * 0.36);   // first screen already shows the outline of the crystal
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) document.getElementById('animToggle').hidden = true;
   const src = i => `assets/${SMALL ? 'frames-sm' : 'frames'}/f${String(i + 1).padStart(3, '0')}.jpg`;
@@ -11,7 +12,7 @@
   const ctx = canvas.getContext('2d');
   const imgs = new Array(FRAMES);
   let current = -1;
-  let target = 0;
+  let target = START;
 
   const draw = i => {
     let k = i; // nearest loaded frame at or below i
@@ -34,6 +35,7 @@
   };
 
   load(0);
+  load(START);
   load(FRAMES - 1);
   const rest = () => { for (let i = 1; i < FRAMES - 1; i++) load(i); };
   ('requestIdleCallback' in window) ? requestIdleCallback(rest, { timeout: 1200 }) : setTimeout(rest, 400);
@@ -84,7 +86,7 @@
   ScrollTrigger.create({
     trigger: '#hero', start: 'top top', end: 'bottom bottom',
     onUpdate: s => {
-      target = Math.round(Math.min(1, s.progress / 0.62) * (FRAMES - 1));
+      target = START + Math.round(Math.min(1, s.progress / 0.62) * (FRAMES - 1 - START));
       draw(target);
     }
   });
