@@ -1,10 +1,10 @@
-# Decap CMS. Same mechanism used on the pashutlitzor site: GitHub backend + OAuth proxy.
-# OAuth proxy: shared Cloudflare Worker (GitHub OAuth App) already deployed under nhftk154.workers.dev.
+# Decap CMS with GitHub backend + OAuth proxy.
+# OAuth proxy: this site's own Cloudflare Worker (oauth-worker/), with its own GitHub OAuth App. Not shared with any other site.
 backend:
   name: github
   repo: nhftk154/shira-toyto-site
   branch: main
-  base_url: https://pashutlitzor-cms-auth.nhftk154.workers.dev
+  base_url: https://REPLACE-WITH-OWN-OAUTH-PROXY.workers.dev
   commit_messages:
     create: 'תוכן: יצירת {{collection}} "{{slug}}"'
     update: 'תוכן: עדכון {{collection}} "{{slug}}"'
