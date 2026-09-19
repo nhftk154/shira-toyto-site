@@ -18,7 +18,7 @@ python3 -m http.server 5173
 4. לחבר דומיין אם רוצים (קובץ CNAME).
 
 ## נשאר לעשות (לחזור לזה)
-- [ ] **OAuth proxy לאדמין:** ה-Worker פרוס (`shira-toyto-cms-auth.nhftk154.workers.dev`). נשאר להגדיר את הסודות `OAUTH_CLIENT_ID` ו-`OAUTH_CLIENT_SECRET` עם `npx wrangler secret put`, ולבדוק כניסה ל-`/admin`.
+- [x] **OAuth proxy לאדמין:** פרוס ומחובר (`shira-toyto-cms-auth.nhftk154.workers.dev`), הכניסה ל-`/admin` נבדקה.
 - [ ] **הרשאת עריכה לאמא:** חשבון GitHub משלה והוספה כ-collaborator בריפו.
 - [ ] **הסבר על "כלי-ניקה עין הבדולח":** למלא באדמין בשדה "עין הבדולח - הסבר". עד אז הקטע מוסתר.
 - [ ] **המלצות אמיתיות, תמונות וסרטונים של הקליניקה:** להוסיף באדמין. עד אז הסקשנים מוסתרים.
