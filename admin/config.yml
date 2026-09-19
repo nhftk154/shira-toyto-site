@@ -52,6 +52,11 @@ collections:
             fields:
               - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
               - { label: "כותרת", name: "title", widget: "string" }
+              - label: "תמונת פרופיל של שירה"
+                name: "photo"
+                widget: "image"
+                required: false
+                hint: "תמונה מרובעת או לאורך עובדת הכי טוב, והיא תוצג בעיגול. אם לא מעלים תמונה, מוצג הלוגו."
               - { label: "פסקה 1", name: "p1", widget: "text" }
               - { label: "פסקה 2", name: "p2", widget: "text" }
               - label: "תגיות"

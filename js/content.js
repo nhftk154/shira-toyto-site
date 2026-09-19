@@ -24,6 +24,12 @@ window.contentReady = (async () => {
       if (typeof v === 'string' && v) n.textContent = v;
     });
     const about = text.about || {};
+    if (about.photo) {   // until a profile photo is uploaded, the logo is shown
+      $('aboutImg').src = url(about.photo);
+      $('aboutImg').alt = 'שירה איבון טויטו';
+      $('aboutPhoto').classList.remove('is-logo');
+      $('aboutPhoto').classList.add('is-photo');
+    }
     (about.tags || []).forEach(t => $('chips').append(el('li', null, typeof t === 'string' ? t : t.tag)));
     (about.stats || []).forEach(s => {
       const box = el('div', 'stat');
@@ -170,4 +176,9 @@ window.contentReady = (async () => {
     $('vidGrid').append(box);
   });
   if ($('vidGrid').children.length) $('videos').hidden = false;
+
+  /* ---- alternate background of the visible sections so gaps read as section changes ---- */
+  [...document.querySelectorAll('main > .sec:not([hidden])')]
+    .filter(n => n.id !== 'about' && n.id !== 'contact')
+    .forEach((n, i) => n.classList.toggle('sec--alt', i % 2 === 0));
 })();
