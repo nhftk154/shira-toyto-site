@@ -312,15 +312,6 @@ main:focus{outline:none}
 .cred__i strong{color:#fff;font-weight:600}
 .cred__i span{color:var(--mute);font-size:.95rem}
 
-/* FAQ: one light section to break the dark run */
-.sec.sec--faq,.sec.sec--faq.sec--alt{background:linear-gradient(180deg,#F6F1FD,#EFE7FB);color:var(--ink)}
-.sec--faq h2{color:var(--ink)}
-.sec--faq .eyebrow{color:var(--amethyst-2)}
-.sec--faq .qa{background:#fff;border-color:rgba(75,42,123,.14);box-shadow:0 8px 24px rgba(75,42,123,.08)}
-.sec--faq .qa summary{color:var(--ink)}
-.sec--faq .qa summary::after{color:var(--amethyst-2)}
-.sec--faq .qa p{color:#4a3766}
-
 /* ---------- gentle polish: cards + buttons ---------- */
 .card,.t-card,.step,.cbox{position:relative}
 .card,.t-card,.step{overflow:hidden}
