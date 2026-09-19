@@ -59,6 +59,21 @@
   fab.classList.add('is-hidden');
   addEventListener('scroll', fabCheck, { passive: true });
 
+  // floating header: transparent on the hero, glass after; dark over dark sections; hides when scrolling down
+  const bar = document.getElementById('top');
+  let lastY = scrollY;
+  const barCheck = () => {
+    const y = scrollY;
+    const past = heroEl.getBoundingClientRect().bottom < 120;
+    bar.classList.toggle('is-stuck', y > 40);
+    bar.classList.toggle('is-dark', past);
+    if (!past || y < lastY - 4) bar.classList.remove('is-hidden');
+    else if (y > lastY + 4) bar.classList.add('is-hidden');
+    lastY = y;
+  };
+  addEventListener('scroll', barCheck, { passive: true });
+  barCheck();
+
   if (reduce) {
     fab.classList.remove('is-hidden');
     const last = imgs[FRAMES - 1];
