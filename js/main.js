@@ -1,8 +1,10 @@
 (() => {
-  const FRAMES = 60;
+  // phones get a lighter sequence (30 frames at 540px, about a third of the download)
+  const SMALL = matchMedia('(max-width: 699px)').matches;
+  const FRAMES = SMALL ? 30 : 60;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) document.getElementById('animToggle').hidden = true;
-  const src = i => `assets/frames/f${String(i + 1).padStart(3, '0')}.jpg`;
+  const src = i => `assets/${SMALL ? 'frames-sm' : 'frames'}/f${String(i + 1).padStart(3, '0')}.jpg`;
 
   /* ---------- frame sequence (hero logo reveal) ---------- */
   const canvas = document.getElementById('logo');

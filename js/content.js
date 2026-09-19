@@ -2,8 +2,8 @@
    Text is always inserted with textContent, never as HTML. */
 window.contentReady = (async () => {
   const get = f => fetch(`content/${f}.json`, { cache: 'no-cache' }).then(r => (r.ok ? r.json() : null)).catch(() => null);
-  const [text, contact, treatments, process, faq, quotes, gallery, videos] =
-    await Promise.all(['site-text', 'contact', 'treatments', 'process', 'faq', 'testimonials', 'gallery', 'videos'].map(get));
+  const [text, contact, treatments, process, faq, quotes, gallery, videos, credentials] =
+    await Promise.all(['site-text', 'contact', 'treatments', 'process', 'faq', 'testimonials', 'gallery', 'videos', 'credentials'].map(get));
 
   const el = (tag, cls, txt) => {
     const n = document.createElement(tag);
@@ -83,6 +83,42 @@ window.contentReady = (async () => {
   const step = dir => rail.scrollBy({ left: dir * -1 * Math.min(rail.clientWidth * 0.8, 380), behavior: 'smooth' });
   $('railNext').onclick = () => step(1);
   $('railPrev').onclick = () => step(-1);
+
+  /* pagination dots for the treatments rail */
+  const dots = $('railDots');
+  const cards = [...rail.children];
+  if (cards.length > 1) {
+    cards.forEach((c, i) => {
+      const b = el('button', 'raildot');
+      b.type = 'button';
+      b.setAttribute('aria-label', `טיפול ${i + 1} מתוך ${cards.length}`);
+      b.addEventListener('click', () => c.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }));
+      dots.append(b);
+    });
+    const mark = () => {
+      const rc = rail.getBoundingClientRect(), mid = rc.left + rc.width / 2;
+      let best = 0, bd = Infinity;
+      cards.forEach((c, i) => {
+        const r = c.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - mid);
+        if (d < bd) { bd = d; best = i; }
+      });
+      [...dots.children].forEach((b, i) => b.classList.toggle('is-on', i === best));
+    };
+    rail.addEventListener('scroll', () => requestAnimationFrame(mark), { passive: true });
+    requestAnimationFrame(mark);
+  } else {
+    dots.hidden = true;
+  }
+
+  /* ---- credentials (hidden until at least one is added) ---- */
+  const cr = items(credentials).filter(c => c && c.title);
+  cr.forEach(c => {
+    const li = el('li', 'cred__i reveal');
+    li.append(el('strong', null, c.title));
+    if (c.detail) li.append(el('span', null, c.detail));
+    $('credList').append(li);
+  });
+  if (cr.length) $('credentials').hidden = false;
 
   /* ---- process ---- */
   items(process).forEach((s, i) => {

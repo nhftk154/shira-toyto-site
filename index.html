@@ -19,7 +19,8 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/Heebo-var-hebrew.woff2" crossorigin>
 <link rel="stylesheet" href="css/fonts.css">
-<link rel="preload" as="image" href="assets/frames/f001.jpg">
+<link rel="preload" as="image" href="assets/frames-sm/f001.jpg" media="(max-width: 699px)">
+<link rel="preload" as="image" href="assets/frames/f001.jpg" media="(min-width: 700px)">
 <link rel="stylesheet" href="css/style.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"שירה איבון טויטו - תרפיה רגשית לילדים","telephone":"+972523221004","address":{"@type":"PostalAddress","addressLocality":"נוף הגליל","addressCountry":"IL"},"areaServed":"צפון ישראל","description":"טיפול רגשי לילדים באזור הצפון"}
@@ -73,6 +74,14 @@
     </div>
   </section>
 
+  <section class="sec sec--cred" id="credentials" hidden>
+    <div class="wrap">
+      <p class="eyebrow reveal" data-c="credentials.eyebrow"></p>
+      <h2 class="reveal" data-c="credentials.title"></h2>
+      <ul class="cred" id="credList"></ul>
+    </div>
+  </section>
+
   <section class="sec sec--ein" id="ein" hidden>
     <div class="wrap">
       <p class="eyebrow reveal" data-c="ein.eyebrow"></p>
@@ -92,6 +101,7 @@
         <button type="button" id="railPrev" aria-label="הקודם">→</button>
         <button type="button" id="railNext" aria-label="הבא">←</button>
       </div>
+      <div class="raildots" id="railDots"></div>
     </div>
   </section>
 

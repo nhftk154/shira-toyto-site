@@ -42,7 +42,7 @@ a{color:inherit;text-decoration:none}
 .top__call{font-weight:500;color:var(--amethyst);font-size:.9rem;padding:8px 16px;border-radius:999px;border:1px solid rgba(75,42,123,.25);min-height:40px;display:inline-flex;align-items:center;transition:color .35s,border-color .35s}
 
 /* hero */
-.hero{position:relative;height:320svh}
+.hero{position:relative;height:230svh}
 .hero__pin{
   position:sticky;top:0;height:100svh;overflow:hidden;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -259,6 +259,7 @@ a{color:inherit;text-decoration:none}
   .railnav{display:flex;gap:10px;justify-content:flex-start;width:min(100% - 2*var(--gutter),1080px);margin:6px auto 0}
   .railnav button{width:48px;height:48px;border-radius:50%;border:1px solid rgba(217,178,111,.5);background:transparent;color:var(--gold);font-size:1.3rem;cursor:pointer}
   .steps{grid-template-columns:repeat(2,1fr)}
+  .cred{grid-template-columns:repeat(2,1fr)}
   .gal{grid-template-columns:repeat(3,1fr)}
   .vids{grid-template-columns:repeat(2,1fr)}
   .t-wrap{height:620px}
@@ -296,6 +297,29 @@ main:focus{outline:none}
 .map__ext{position:absolute;inset-inline-start:12px;bottom:12px;z-index:2;padding:6px 12px;border-radius:999px;background:rgba(26,16,48,.85);color:var(--gold);text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}
 .foot__disc{max-width:70ch;line-height:1.6;font-size:.82rem}
 .legal h1+p{margin-top:8px}
+
+
+/* treatments rail dots */
+.raildots{display:flex;justify-content:center;gap:2px;margin-top:4px}
+.raildot{position:relative;width:24px;height:24px;border:0;background:none;padding:0;cursor:pointer}
+.raildot::before{content:"";position:absolute;inset:8px;border-radius:50%;background:rgba(237,228,255,.32);transition:inset .25s,background .25s}
+.raildot.is-on::before{inset:6px;background:var(--gold)}
+
+/* credentials */
+.cred{list-style:none;display:grid;gap:12px;margin-top:8px}
+.cred__i{position:relative;display:flex;flex-direction:column;gap:2px;padding:16px 20px;padding-inline-start:52px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
+.cred__i::before{content:"\2726";position:absolute;inset-inline-start:18px;top:16px;color:var(--gold);font-size:1.1rem}
+.cred__i strong{color:#fff;font-weight:600}
+.cred__i span{color:var(--mute);font-size:.95rem}
+
+/* FAQ: one light section to break the dark run */
+.sec.sec--faq,.sec.sec--faq.sec--alt{background:linear-gradient(180deg,#F6F1FD,#EFE7FB);color:var(--ink)}
+.sec--faq h2{color:var(--ink)}
+.sec--faq .eyebrow{color:var(--amethyst-2)}
+.sec--faq .qa{background:#fff;border-color:rgba(75,42,123,.14);box-shadow:0 8px 24px rgba(75,42,123,.08)}
+.sec--faq .qa summary{color:var(--ink)}
+.sec--faq .qa summary::after{color:var(--amethyst-2)}
+.sec--faq .qa p{color:#4a3766}
 
 /* ---------- gentle polish: cards + buttons ---------- */
 .card,.t-card,.step,.cbox{position:relative}

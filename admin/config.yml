@@ -74,6 +74,13 @@ collections:
                   - { label: "מספר / ערך", name: "number", widget: "string" }
                   - { label: "תיאור מתחת למספר", name: "label", widget: "string" }
 
+          - label: "מקטע הכשרה ומקצועיות — כותרת עליונה"
+            name: "credentials"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+
           - label: "מקטע 'כלי-ניקה עין הבדולח'"
             name: "ein"
             widget: "object"
@@ -164,6 +171,23 @@ collections:
             required: false
             hint: "עיר או כתובת מלאה, למשל: ציפורן 10, נוף הגליל. אם משאירים ריק, המפה לא מוצגת."
 
+
+  - name: "credentials"
+    label: "הכשרה והשכלה"
+    files:
+      - name: "credentials"
+        label: "הכשרה והשכלה"
+        file: "content/credentials.json"
+        fields:
+          - label: "הכשרות, תארים ותעודות (המקטע מוצג באתר רק כשיש לפחות פריט אחד)"
+            name: "items"
+            widget: "list"
+            required: false
+            label_singular: "הכשרה"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "שם ההכשרה / התעודה", name: "title", widget: "string" }
+              - { label: "פרטים (מוסד, שנה, היקף)", name: "detail", widget: "string", required: false }
 
   - name: "treatments"
     label: "הטיפולים"
