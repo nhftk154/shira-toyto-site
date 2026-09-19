@@ -14,8 +14,8 @@ python3 -m http.server 5173
 ## פרסום (חד-פעמי)
 1. ליצור ריפו `nhftk154/shira-toyto-site` ב-GitHub ולדחוף אליו את התיקייה.
 2. להפעיל GitHub Pages (Settings, Pages, branch main).
-3. הכניסה ל-`/admin` דורשת OAuth proxy עם GitHub OAuth App (callback של ה-proxy).
-   לעדכן ב-`admin/config.yml`: `base_url` ו-`site_url`.
+3. הכניסה ל-`/admin` עוברת דרך OAuth proxy (Cloudflare Worker) משותף שכבר פרוס ב-`nhftk154.workers.dev`, ומוגדר ב-`admin/config.yml` (`base_url`).
+   מי שנכנס חייב להיות חשבון GitHub עם הרשאת כתיבה לריפו (Settings, Collaborators).
 4. לחבר דומיין אם רוצים (קובץ CNAME).
 
 ## עדיין פתוח
