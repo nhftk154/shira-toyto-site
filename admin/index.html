@@ -1,12 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>עריכת האתר</title>
+  <title>עריכת האתר · שירה איבון טויטו</title>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
+  <!-- Sveltia CMS: משתמש ב-admin/config.yml (אותו פורמט של Decap) ובפרוקסי OAuth הייעודי של האתר.
+       ספריית המדיה המובנית מעלה תמונה אחת בכל פעם, ולכן יש כלי נפרד להעלאת כמה תמונות בבת אחת
+       (bulk-images.html), עם קישור צף בפינה. -->
+  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+  <script>
+    (function () {
+      function addBulkImagesLink() {
+        if (document.getElementById('bulk-images-link')) return;
+        var a = document.createElement('a');
+        a.id = 'bulk-images-link';
+        a.href = 'bulk-images.html';
+        a.textContent = 'העלאת כמה תמונות בבת אחת';
+        a.style.cssText = [
+          'position:fixed', 'bottom:16px', 'left:16px', 'z-index:9999',
+          'background:#6B45A3', 'color:#fff', 'padding:10px 16px',
+          'border-radius:20px', 'font-family:-apple-system,"Segoe UI",Arial,sans-serif',
+          'font-size:13px', 'text-decoration:none', 'box-shadow:0 2px 8px rgba(0,0,0,.3)'
+        ].join(';');
+        document.body.appendChild(a);
+      }
+      addBulkImagesLink();
+      new MutationObserver(addBulkImagesLink).observe(document.body, { childList: true });
+    })();
+  </script>
 </body>
 </html>

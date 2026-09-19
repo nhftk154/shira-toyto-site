@@ -1,127 +1,298 @@
-# Decap CMS with GitHub backend + OAuth proxy.
-# OAuth proxy: this site's own Cloudflare Worker (oauth-worker/), with its own GitHub OAuth App. Not shared with any other site.
+# ממשק העריכה של האתר (Sveltia CMS, אותו פורמט הגדרות של Decap).
+# הכניסה עוברת דרך OAuth proxy ייעודי לאתר הזה (oauth-worker/), עם GitHub OAuth App משלו.
 backend:
   name: github
   repo: nhftk154/shira-toyto-site
   branch: main
   base_url: https://shira-toyto-cms-auth.nhftk154.workers.dev
+  auth_endpoint: auth
   commit_messages:
     create: 'תוכן: יצירת {{collection}} "{{slug}}"'
     update: 'תוכן: עדכון {{collection}} "{{slug}}"'
     delete: 'תוכן: מחיקת {{collection}} "{{slug}}"'
 
-locale: he
+local_backend: true
+
 site_url: https://nhftk154.github.io/shira-toyto-site/
-media_folder: assets/uploads
-public_folder: assets/uploads
-publish_mode: simple
+display_url: https://nhftk154.github.io/shira-toyto-site/
+logo_url: https://nhftk154.github.io/shira-toyto-site/assets/favicon.png
+locale: "he"
+
+media_folder: "assets/uploads"
+public_folder: "assets/uploads"
 
 collections:
-  - name: site
-    label: טקסטים ופרטי קשר
+  - name: "site-text"
+    label: "טקסטים כלליים באתר"
     files:
-      - name: main
-        label: האתר הראשי
-        file: content/site.json
-        format: json
+      - name: "site-text"
+        label: "טקסטים כלליים באתר"
+        file: "content/site-text.json"
         fields:
-          - { name: brand, label: שם בראש הדף, widget: string }
-          - { name: tagline, label: שורת משנה, widget: string }
-          - { name: headline, label: כותרת ראשית, widget: string }
-          - { name: subline, label: טקסט מתחת לכותרת, widget: text }
-          - { name: phone, label: טלפון (ספרות בלבד), widget: string }
-          - { name: phone_display, label: טלפון להצגה, widget: string }
-          - { name: whatsapp_text, label: הודעת וואטסאפ מוכנה, widget: text }
-          - { name: cta_primary, label: כפתור ראשי, widget: string }
-          - { name: cta_secondary, label: כפתור התקשרות, widget: string }
-          - { name: about_eyebrow, label: עליי - כותרת קטנה, widget: string }
-          - { name: about_title, label: עליי - כותרת, widget: string }
-          - { name: about_p1, label: עליי - פסקה 1, widget: text }
-          - { name: about_p2, label: עליי - פסקה 2, widget: text }
-          - { name: tags, label: תגיות, widget: list, field: { name: tag, label: תגית, widget: string } }
-          - name: stats
-            label: מספרים
-            widget: list
+          - label: "שורה עליונה"
+            name: "header"
+            widget: "object"
             fields:
-              - { name: number, label: מספר, widget: string }
-              - { name: label, label: כיתוב, widget: string }
-          - { name: ein_eyebrow, label: עין הבדולח - כותרת קטנה, widget: string }
-          - { name: ein_title, label: עין הבדולח - כותרת, widget: string }
-          - { name: ein_body, label: עין הבדולח - הסבר (אם ריק, הקטע לא יוצג), widget: text, required: false }
-          - { name: treat_eyebrow, label: טיפולים - כותרת קטנה, widget: string }
-          - { name: treat_title, label: טיפולים - כותרת, widget: string }
-          - { name: process_eyebrow, label: תהליך - כותרת קטנה, widget: string }
-          - { name: process_title, label: תהליך - כותרת, widget: string }
-          - { name: process_note, label: תהליך - הערה (מחיר), widget: string }
-          - { name: gallery_eyebrow, label: גלריה - כותרת קטנה, widget: string }
-          - { name: gallery_title, label: גלריה - כותרת, widget: string }
-          - { name: quotes_eyebrow, label: המלצות - כותרת קטנה, widget: string }
-          - { name: quotes_title, label: המלצות - כותרת, widget: string }
-          - { name: faq_eyebrow, label: שאלות - כותרת קטנה, widget: string }
-          - { name: faq_title, label: שאלות - כותרת, widget: string }
-          - { name: contact_eyebrow, label: יצירת קשר - כותרת קטנה, widget: string }
-          - { name: contact_title, label: יצירת קשר - כותרת, widget: string }
-          - { name: contact_text, label: יצירת קשר - טקסט, widget: text }
-          - { name: address, label: כתובת הקליניקה, widget: string }
-          - { name: footer_note, label: טקסט בתחתית, widget: string }
+              - { label: "שם בראש הדף", name: "brand", widget: "string" }
 
-  - name: lists
-    label: רשימות
+          - label: "מסך פתיחה (למעלה)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "שורה קטנה מעל הלוגו", name: "tagline", widget: "string" }
+              - { label: "כותרת ראשית", name: "headline", widget: "string" }
+              - { label: "משפט משנה", name: "subline", widget: "text" }
+              - { label: "טקסט כפתור וואטסאפ", name: "ctaPrimary", widget: "string" }
+              - { label: "טקסט כפתור התקשרות", name: "ctaSecondary", widget: "string" }
+
+          - label: "מקטע 'עליי'"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+              - { label: "פסקה 1", name: "p1", widget: "text" }
+              - { label: "פסקה 2", name: "p2", widget: "text" }
+              - label: "תגיות"
+                name: "tags"
+                widget: "list"
+                required: false
+                field: { label: "תגית", name: "tag", widget: "string" }
+              - label: "מספרים (למשל שנות ניסיון)"
+                name: "stats"
+                widget: "list"
+                required: false
+                label_singular: "מספר"
+                summary: "{{fields.number}} — {{fields.label}}"
+                fields:
+                  - { label: "מספר / ערך", name: "number", widget: "string" }
+                  - { label: "תיאור מתחת למספר", name: "label", widget: "string" }
+
+          - label: "מקטע 'כלי-ניקה עין הבדולח'"
+            name: "ein"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+              - label: "הסבר על השיטה"
+                name: "body"
+                widget: "text"
+                required: false
+                hint: "אם משאירים ריק, המקטע כולו לא מוצג באתר. שורה ריקה בין פסקאות."
+
+          - label: "מקטע הטיפולים — כותרת עליונה"
+            name: "treatments"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+
+          - label: "מקטע תהליך הטיפול — כותרת עליונה"
+            name: "process"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+              - { label: "הערה בתחתית (למשל מחיר)", name: "note", widget: "string", required: false }
+
+          - label: "מקטע גלריה — כותרת עליונה"
+            name: "gallery"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+
+          - label: "מקטע סרטונים — כותרת עליונה"
+            name: "videos"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+
+          - label: "מקטע המלצות — כותרת עליונה"
+            name: "testimonials"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+
+          - label: "מקטע שאלות ותשובות — כותרת עליונה"
+            name: "faq"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+
+          - label: "מקטע סיום (יצירת קשר)"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "תווית קטנה", name: "eyebrow", widget: "string" }
+              - { label: "כותרת", name: "title", widget: "string" }
+              - { label: "משפט הסבר", name: "text", widget: "text" }
+              - { label: "טקסט כפתור וואטסאפ", name: "ctaPrimary", widget: "string" }
+
+          - label: "פוטר (תחתית העמוד)"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "טקסט זכויות יוצרים", name: "rights", widget: "string" }
+
+  - name: "contact"
+    label: "פרטי קשר"
     files:
-      - name: treatments
-        label: הטיפולים
-        file: content/treatments.json
-        format: json
+      - name: "contact"
+        label: "פרטי קשר"
+        file: "content/contact.json"
         fields:
-          - name: items
-            label: טיפולים
-            widget: list
-            fields:
-              - { name: title, label: שם הטיפול, widget: string }
-              - { name: text, label: תיאור, widget: text }
-      - name: process
-        label: שלבי התהליך
-        file: content/process.json
-        format: json
+          - { label: "טלפון (ספרות בלבד, למשל 0523221004)", name: "phone", widget: "string" }
+          - { label: "טלפון להצגה (למשל 052-322-1004)", name: "phoneDisplay", widget: "string" }
+          - label: "הודעת וואטסאפ מוכנה מראש"
+            name: "whatsappText"
+            widget: "text"
+            hint: "הטקסט שיופיע אוטומטית בהודעה כשלוחצים על כפתור הוואטסאפ"
+          - { label: "כתובת / מיקום הקליניקה", name: "address", widget: "string" }
+
+  - name: "treatments"
+    label: "הטיפולים"
+    files:
+      - name: "treatments"
+        label: "הטיפולים"
+        file: "content/treatments.json"
         fields:
-          - name: items
-            label: שלבים
-            widget: list
+          - label: "כרטיסי טיפולים"
+            name: "items"
+            widget: "list"
+            label_singular: "טיפול"
+            summary: "{{fields.title}}"
             fields:
-              - { name: title, label: כותרת, widget: string }
-              - { name: text, label: תיאור, widget: text }
-      - name: faq
-        label: שאלות ותשובות
-        file: content/faq.json
-        format: json
+              - { label: "שם הטיפול", name: "title", widget: "string" }
+              - { label: "תיאור", name: "description", widget: "text" }
+              - label: "הודעת וואטסאפ מוכנה מראש"
+                name: "waText"
+                widget: "string"
+                hint: "הטקסט שיופיע אוטומטית בהודעה כשלוחצים על 'לפרטים' בכרטיס"
+
+  - name: "process"
+    label: "שלבי תהליך הטיפול"
+    files:
+      - name: "process"
+        label: "שלבי תהליך הטיפול"
+        file: "content/process.json"
         fields:
-          - name: items
-            label: שאלות
-            widget: list
+          - label: "שלבים"
+            name: "items"
+            widget: "list"
+            label_singular: "שלב"
+            summary: "{{fields.title}}"
             fields:
-              - { name: q, label: שאלה, widget: string }
-              - { name: a, label: תשובה, widget: text }
-      - name: testimonials
-        label: המלצות (מוצגות רק כשיש לפחות אחת)
-        file: content/testimonials.json
-        format: json
+              - { label: "כותרת", name: "title", widget: "string" }
+              - { label: "תיאור", name: "text", widget: "text" }
+
+  - name: "faq"
+    label: "שאלות ותשובות"
+    files:
+      - name: "faq"
+        label: "שאלות ותשובות"
+        file: "content/faq.json"
         fields:
-          - name: items
-            label: המלצות
-            widget: list
+          - label: "שאלות"
+            name: "items"
+            widget: "list"
+            label_singular: "שאלה"
+            summary: "{{fields.q}}"
             fields:
-              - { name: text, label: ההמלצה, widget: text }
-              - { name: name, label: שם, widget: string }
-              - { name: place, label: יישוב, widget: string, required: false }
-      - name: gallery
-        label: גלריה (מוצגת רק כשיש פריטים)
-        file: content/gallery.json
-        format: json
+              - { label: "שאלה", name: "q", widget: "string" }
+              - { label: "תשובה", name: "a", widget: "text" }
+
+  - name: "testimonials"
+    label: "המלצות"
+    files:
+      - name: "testimonials"
+        label: "המלצות"
+        file: "content/testimonials.json"
         fields:
-          - name: items
-            label: פריטים
-            widget: list
+          - label: "המלצות (המקטע מוצג באתר רק כשיש לפחות המלצה אחת)"
+            name: "items"
+            widget: "list"
+            required: false
+            label_singular: "המלצה"
+            summary: "{{fields.name}}"
             fields:
-              - { name: image, label: תמונה, widget: image, required: false }
-              - { name: video, label: קובץ וידאו (אופציונלי), widget: file, required: false }
-              - { name: caption, label: כיתוב, widget: string, required: false }
+              - { label: "תוכן ההמלצה", name: "quote", widget: "text" }
+              - { label: "שם", name: "name", widget: "string" }
+              - { label: "פרטים נוספים (יישוב וכו')", name: "meta", widget: "string", required: false }
+
+  - name: "gallery"
+    label: "גלריית תמונות"
+    files:
+      - name: "gallery"
+        label: "גלריית תמונות"
+        file: "content/gallery.json"
+        fields:
+          - label: "תמונות (המקטע מוצג באתר רק כשיש תמונות)"
+            name: "items"
+            widget: "image"
+            multiple: true
+            required: false
+            hint: "כאן אפשר להוסיף/להחליף תמונה אחת. להעלאת כמה תמונות בבת אחת יש כלי נפרד: הכפתור הסגול בפינה, או admin/bulk-images.html"
+
+  - name: "videos"
+    label: "סרטונים"
+    files:
+      - name: "videos"
+        label: "סרטונים"
+        file: "content/videos.json"
+        fields:
+          - label: "סרטונים (המקטע מוצג באתר רק כשיש סרטון)"
+            name: "items"
+            widget: "list"
+            required: false
+            label_singular: "סרטון"
+            summary: "{{fields.title}}"
+            types:
+              - name: "youtube"
+                label: "סרטון מיוטיוב"
+                widget: "object"
+                summary: "{{fields.title}} (יוטיוב)"
+                fields:
+                  - { label: "כותרת קצרה לסרטון", name: "title", widget: "string", required: false }
+                  - label: "קישור YouTube"
+                    name: "youtube_url"
+                    widget: "string"
+                    hint: "הדביקו כאן את הקישור לסרטון מיוטיוב (למשל https://www.youtube.com/watch?v=...)"
+                  - label: "תמונה ממוזערת (אופציונלי)"
+                    name: "poster"
+                    widget: "image"
+                    required: false
+                    hint: "אם לא תעלו תמונה — תוצג אוטומטית תמונה מיוטיוב"
+                  - label: "כיוון הסרטון"
+                    name: "aspect"
+                    widget: "select"
+                    default: "landscape"
+                    options:
+                      - { label: "לרוחב", value: "landscape" }
+                      - { label: "לאורך (טלפון)", value: "portrait" }
+                      - { label: "מרובע", value: "square" }
+              - name: "file"
+                label: "סרטון שהעליתי בעצמי"
+                widget: "object"
+                summary: "{{fields.title}} (קובץ)"
+                fields:
+                  - { label: "כותרת קצרה לסרטון", name: "title", widget: "string", required: false }
+                  - label: "קובץ הסרטון"
+                    name: "file_src"
+                    widget: "file"
+                    hint: "העלו כאן את קובץ הסרטון (mp4 מומלץ, עד כמה מגה)"
+                  - label: "תמונה ממוזערת (חובה)"
+                    name: "poster"
+                    widget: "image"
+                    hint: "תמונת שער שתוצג לפני הפעלת הסרטון"
+                  - label: "כיוון הסרטון"
+                    name: "aspect"
+                    widget: "select"
+                    default: "portrait"
+                    options:
+                      - { label: "לרוחב", value: "landscape" }
+                      - { label: "לאורך (טלפון)", value: "portrait" }
+                      - { label: "מרובע", value: "square" }

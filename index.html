@@ -26,7 +26,7 @@
 <a class="skip" href="#main">דילוג לתוכן</a>
 
 <header class="top" id="top">
-  <span class="top__brand" data-c="brand">שירה איבון טויטו</span>
+  <span class="top__brand" data-c="header.brand">שירה איבון טויטו</span>
   <a class="top__call" data-phone href="tel:0523221004" aria-label="התקשרות">052-322-1004</a>
 </header>
 
@@ -36,18 +36,18 @@
       <div class="hero__glow" aria-hidden="true"></div>
       <canvas class="hero__sparks" id="sparks" aria-hidden="true"></canvas>
 
-      <p class="hero__tag" data-c="tagline">תרפיה רגשית לילדים בצפון</p>
+      <p class="hero__tag" data-c="hero.tagline">תרפיה רגשית לילדים בצפון</p>
 
       <div class="hero__stage">
         <canvas class="hero__logo" id="logo" width="720" height="562" role="img" aria-label="לוגו כלי-ניקה עין הבדולח: יהלום בצורת עין"></canvas>
       </div>
 
       <div class="hero__copy" id="heroCopy">
-        <h1 data-c="headline">מחזירה לילדים את האור</h1>
-        <p data-c="subline">טיפול עדין ומעמיק שמשחרר חסמים ומחזיר לילד/ה ביטחון ושמחה.</p>
+        <h1 data-c="hero.headline">מחזירה לילדים את האור</h1>
+        <p data-c="hero.subline">טיפול עדין ומעמיק שמשחרר חסמים ומחזיר לילד/ה ביטחון ושמחה.</p>
         <div class="hero__cta">
-          <a class="btn btn--gold" data-wa href="https://wa.me/972523221004" target="_blank" rel="noopener"><span data-c="cta_primary">קביעת שיחת היכרות</span></a>
-          <a class="btn btn--ghost" data-phone href="tel:0523221004"><span data-c="cta_secondary">התקשרות</span></a>
+          <a class="btn btn--gold" data-wa href="https://wa.me/972523221004" target="_blank" rel="noopener"><span data-c="hero.ctaPrimary">קביעת שיחת היכרות</span></a>
+          <a class="btn btn--ghost" data-phone href="tel:0523221004"><span data-c="hero.ctaSecondary">התקשרות</span></a>
         </div>
       </div>
 
@@ -57,10 +57,10 @@
 
   <section class="sec sec--about" id="about">
     <div class="wrap">
-      <p class="eyebrow reveal" data-c="about_eyebrow"></p>
-      <h2 class="reveal" data-c="about_title"></h2>
-      <p class="lead reveal" data-c="about_p1"></p>
-      <p class="lead reveal" data-c="about_p2"></p>
+      <p class="eyebrow reveal" data-c="about.eyebrow"></p>
+      <h2 class="reveal" data-c="about.title"></h2>
+      <p class="lead reveal" data-c="about.p1"></p>
+      <p class="lead reveal" data-c="about.p2"></p>
       <ul class="chips reveal" id="chips"></ul>
       <dl class="stats reveal" id="stats"></dl>
     </div>
@@ -68,16 +68,16 @@
 
   <section class="sec sec--ein" id="ein" hidden>
     <div class="wrap">
-      <p class="eyebrow reveal" data-c="ein_eyebrow"></p>
-      <h2 class="reveal" data-c="ein_title"></h2>
+      <p class="eyebrow reveal" data-c="ein.eyebrow"></p>
+      <h2 class="reveal" data-c="ein.title"></h2>
       <div class="prose reveal" id="einBody"></div>
     </div>
   </section>
 
   <section class="sec sec--treat" id="treatments">
     <div class="wrap">
-      <p class="eyebrow reveal" data-c="treat_eyebrow"></p>
-      <h2 class="reveal" data-c="treat_title"></h2>
+      <p class="eyebrow reveal" data-c="treatments.eyebrow"></p>
+      <h2 class="reveal" data-c="treatments.title"></h2>
     </div>
     <div class="railwrap">
       <div class="rail" id="rail" tabindex="0" role="list" aria-label="הטיפולים"></div>
@@ -90,33 +90,41 @@
 
   <section class="sec sec--process" id="process">
     <div class="wrap">
-      <p class="eyebrow reveal" data-c="process_eyebrow"></p>
-      <h2 class="reveal" data-c="process_title"></h2>
+      <p class="eyebrow reveal" data-c="process.eyebrow"></p>
+      <h2 class="reveal" data-c="process.title"></h2>
       <ol class="steps" id="steps"></ol>
-      <p class="note reveal" data-c="process_note"></p>
+      <p class="note reveal" data-c="process.note"></p>
     </div>
   </section>
 
   <section class="sec sec--gallery" id="gallery" hidden>
     <div class="wrap">
-      <p class="eyebrow reveal" data-c="gallery_eyebrow"></p>
-      <h2 class="reveal" data-c="gallery_title"></h2>
+      <p class="eyebrow reveal" data-c="gallery.eyebrow"></p>
+      <h2 class="reveal" data-c="gallery.title"></h2>
       <div class="gal" id="galGrid"></div>
+    </div>
+  </section>
+
+  <section class="sec sec--videos" id="videos" hidden>
+    <div class="wrap">
+      <p class="eyebrow reveal" data-c="videos.eyebrow"></p>
+      <h2 class="reveal" data-c="videos.title"></h2>
+      <div class="vids" id="vidGrid"></div>
     </div>
   </section>
 
   <section class="sec sec--quotes" id="quotes" hidden>
     <div class="wrap">
-      <p class="eyebrow reveal" data-c="quotes_eyebrow"></p>
-      <h2 class="reveal" data-c="quotes_title"></h2>
+      <p class="eyebrow reveal" data-c="testimonials.eyebrow"></p>
+      <h2 class="reveal" data-c="testimonials.title"></h2>
       <div class="quotes" id="quoteList"></div>
     </div>
   </section>
 
   <section class="sec sec--faq" id="faq">
     <div class="wrap wrap--narrow">
-      <p class="eyebrow reveal" data-c="faq_eyebrow"></p>
-      <h2 class="reveal" data-c="faq_title"></h2>
+      <p class="eyebrow reveal" data-c="faq.eyebrow"></p>
+      <h2 class="reveal" data-c="faq.title"></h2>
       <div class="faq" id="faqList"></div>
     </div>
   </section>
@@ -124,20 +132,20 @@
   <section class="sec sec--contact" id="contact">
     <canvas class="gem" id="gem" aria-hidden="true"></canvas>
     <div class="wrap wrap--center">
-      <p class="eyebrow reveal" data-c="contact_eyebrow"></p>
-      <h2 class="reveal" data-c="contact_title"></h2>
-      <p class="lead reveal" data-c="contact_text"></p>
+      <p class="eyebrow reveal" data-c="contact.eyebrow"></p>
+      <h2 class="reveal" data-c="contact.title"></h2>
+      <p class="lead reveal" data-c="contact.text"></p>
       <div class="cta-row reveal">
-        <a class="btn btn--gold" data-wa href="https://wa.me/972523221004" target="_blank" rel="noopener"><span data-c="cta_primary">קביעת שיחת היכרות</span></a>
+        <a class="btn btn--gold" data-wa href="https://wa.me/972523221004" target="_blank" rel="noopener"><span data-c="contact.ctaPrimary">קביעת שיחת היכרות</span></a>
         <a class="btn btn--ghost-light" data-phone href="tel:0523221004"><span data-phone-text>052-322-1004</span></a>
       </div>
-      <p class="addr reveal" data-c="address"></p>
+      <p class="addr reveal" data-i="address"></p>
     </div>
   </section>
 </main>
 
 <footer class="foot">
-  <span data-c="footer_note">© שירה איבון טויטו. כל הזכויות שמורות.</span>
+  <span data-c="footer.rights">© שירה איבון טויטו. כל הזכויות שמורות.</span>
   <nav aria-label="מידע משפטי">
     <a href="accessibility.html">הצהרת נגישות</a>
     <a href="privacy.html">מדיניות פרטיות</a>
