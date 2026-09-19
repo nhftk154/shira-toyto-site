@@ -298,3 +298,43 @@ main:focus{outline:none}
 .map__ext{color:var(--gold);text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}
 .foot__disc{max-width:70ch;line-height:1.6;font-size:.82rem}
 .legal h1+p{margin-top:8px}
+
+/* ---------- gentle polish: cards + buttons ---------- */
+.card,.t-card,.step,.cbox{position:relative}
+.card,.t-card,.step{overflow:hidden}
+/* hairline of gold light along the top edge */
+.card::before,.t-card::before,.step::before,.cbox::before{
+  content:"";position:absolute;z-index:1;inset-inline:22px;top:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(217,178,111,.75),transparent);
+}
+/* soft glow in the corner, revealed on hover only */
+.card::after,.step::after{
+  content:"";position:absolute;inset-block-start:-50px;inset-inline-end:-50px;width:150px;height:150px;pointer-events:none;
+  background:radial-gradient(circle,rgba(217,178,111,.2),transparent 65%);opacity:0;transition:opacity .6s ease;
+}
+.card,.step,.t-card{top:0;transition:top .45s cubic-bezier(.2,.7,.2,1),border-color .45s,box-shadow .45s}
+
+.btn{position:relative;overflow:hidden;isolation:isolate;transition:translate .25s,transform .25s,box-shadow .3s,background .3s,border-color .3s,color .3s}
+.btn--gold::after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.5) 50%,transparent 65%);
+  transform:translateX(-130%);
+}
+
+@media (hover:hover){
+  .card:hover,.step:hover{top:-3px;border-color:rgba(217,178,111,.5);box-shadow:0 22px 46px rgba(0,0,0,.32),0 0 0 1px rgba(217,178,111,.08)}
+  .card:hover::after,.step:hover::after{opacity:1}
+  .btn--gold:hover{translate:0 -1px;box-shadow:0 12px 30px rgba(185,138,62,.45)}
+  .btn--gold:hover::after{transform:translateX(130%);transition:transform .9s ease}
+  .btn--ghost:hover{border-color:rgba(75,42,123,.6);background:rgba(255,255,255,.8)}
+  .btn--ghost-light:hover{border-color:rgba(217,178,111,.7);background:rgba(217,178,111,.1);color:#fff}
+  .card__cta{transition:letter-spacing .3s,color .3s}
+  .card:hover .card__cta{color:#F1D79E;letter-spacing:.02em}
+}
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){
+  .card,.step,.t-card,.btn{transition:none}
+  .card:hover,.step:hover{top:0}
+  .btn--gold:hover{translate:none}
+  .btn--gold::after{display:none}
+}
