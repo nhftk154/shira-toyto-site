@@ -193,11 +193,23 @@ a{color:inherit;text-decoration:none}
 .sec--contact{overflow:hidden;padding:330px 0 110px;background:radial-gradient(80% 60% at 50% 30%,#3a2262 0,var(--night) 70%)}
 .gem{position:absolute;inset:20px 0 auto 0;width:100%;height:320px;opacity:0;transition:opacity 1.2s;pointer-events:none}
 .gem.is-on{opacity:1}
-.sec--contact .wrap{position:relative;z-index:1}
-.sec--contact .lead{max-width:44ch}
-.cta-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
 .btn--ghost-light{border:1.5px solid rgba(237,228,255,.45);color:#fff;background:rgba(255,255,255,.06);backdrop-filter:blur(6px);direction:ltr}
-.addr{margin-top:26px;color:var(--mute)}
+
+/* contact card */
+.sec--contact .wrap{position:relative;z-index:1}
+.cbox{display:grid;grid-template-columns:1fr;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(217,178,111,.28);box-shadow:0 24px 60px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.cbox__info{padding:34px 24px 30px;text-align:start;display:flex;flex-direction:column;align-items:flex-start}
+.cbox__info h2{margin-bottom:16px}
+.cbox__info .lead{max-width:46ch}
+.addr{display:flex;align-items:center;gap:10px;margin:6px 0 26px;color:var(--ice);font-weight:500}
+.addr::before{content:"";flex:none;width:12px;height:12px;border-radius:50%;background:var(--gold)}
+.addr:empty{display:none}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.cta-row .btn svg{margin-inline-end:8px}
+.btn--ghost-light span[data-phone-text]{direction:ltr}
+.cbox__map{position:relative;min-height:320px;background:#0d0719}
+.cbox__map iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.cbox.no-map{max-width:640px;margin-inline:auto}
 
 .foot{
   display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;
@@ -237,6 +249,9 @@ a{color:inherit;text-decoration:none}
   .chips,.stats{justify-content:center}
   .stats{gap:64px}
   .sec--contact{padding-top:430px}
+  .cbox:not(.no-map){grid-template-columns:1fr 1fr;min-height:480px}
+  .cbox__info{padding:48px 44px;justify-content:center}
+  .cbox__map{min-height:0}
   .gem{height:420px;inset-block-start:30px}
   .card{flex-basis:340px}
   .rail{padding-inline:max(var(--gutter),calc((100vw - 1080px)/2))}

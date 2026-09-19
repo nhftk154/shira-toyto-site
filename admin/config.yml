@@ -153,6 +153,12 @@ collections:
             widget: "text"
             hint: "הטקסט שיופיע אוטומטית בהודעה כשלוחצים על כפתור הוואטסאפ"
           - { label: "כתובת / מיקום הקליניקה", name: "address", widget: "string" }
+          - label: "מיקום להצגה במפה (Google Maps)"
+            name: "mapQuery"
+            widget: "string"
+            required: false
+            hint: "עיר או כתובת מלאה, למשל: ציפורן 10, נוף הגליל. אם משאירים ריק, המפה לא מוצגת."
+
 
   - name: "treatments"
     label: "הטיפולים"

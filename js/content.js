@@ -46,6 +46,17 @@ window.contentReady = (async () => {
     if (digits) document.querySelectorAll('[data-phone]').forEach(a => { a.href = `tel:${digits}`; });
     document.querySelectorAll('[data-phone-text]').forEach(a => { a.textContent = contact.phoneDisplay || contact.phone; });
     document.querySelectorAll('[data-i="address"]').forEach(a => { a.textContent = contact.address || ''; });
+
+    // map (Google Maps embed, no API key); shows the area only, e.g. a city name
+    const mq = (contact.mapQuery || '').trim();
+    if (mq) {
+      $('mapFrame').src = `https://maps.google.com/maps?q=${encodeURIComponent(mq)}&z=15&hl=he&output=embed`;
+      $('mapBox').hidden = false;
+    } else {
+      $('cbox').classList.add('no-map');
+    }
+  } else {
+    $('cbox').classList.add('no-map');
   }
 
   /* ---- treatments rail ---- */
