@@ -1,0 +1,127 @@
+# Decap CMS. Same mechanism used on the pashutlitzor site: GitHub backend + OAuth proxy.
+# TODO before going live: set base_url to the deployed OAuth proxy (see README).
+backend:
+  name: github
+  repo: nhftk154/shira-toyto-site
+  branch: main
+  base_url: https://REPLACE-WITH-OAUTH-PROXY.workers.dev
+  commit_messages:
+    create: 'תוכן: יצירת {{collection}} "{{slug}}"'
+    update: 'תוכן: עדכון {{collection}} "{{slug}}"'
+    delete: 'תוכן: מחיקת {{collection}} "{{slug}}"'
+
+locale: he
+site_url: https://nhftk154.github.io/shira-toyto-site/
+media_folder: assets/uploads
+public_folder: assets/uploads
+publish_mode: simple
+
+collections:
+  - name: site
+    label: טקסטים ופרטי קשר
+    files:
+      - name: main
+        label: האתר הראשי
+        file: content/site.json
+        format: json
+        fields:
+          - { name: brand, label: שם בראש הדף, widget: string }
+          - { name: tagline, label: שורת משנה, widget: string }
+          - { name: headline, label: כותרת ראשית, widget: string }
+          - { name: subline, label: טקסט מתחת לכותרת, widget: text }
+          - { name: phone, label: טלפון (ספרות בלבד), widget: string }
+          - { name: phone_display, label: טלפון להצגה, widget: string }
+          - { name: whatsapp_text, label: הודעת וואטסאפ מוכנה, widget: text }
+          - { name: cta_primary, label: כפתור ראשי, widget: string }
+          - { name: cta_secondary, label: כפתור התקשרות, widget: string }
+          - { name: about_eyebrow, label: עליי - כותרת קטנה, widget: string }
+          - { name: about_title, label: עליי - כותרת, widget: string }
+          - { name: about_p1, label: עליי - פסקה 1, widget: text }
+          - { name: about_p2, label: עליי - פסקה 2, widget: text }
+          - { name: tags, label: תגיות, widget: list, field: { name: tag, label: תגית, widget: string } }
+          - name: stats
+            label: מספרים
+            widget: list
+            fields:
+              - { name: number, label: מספר, widget: string }
+              - { name: label, label: כיתוב, widget: string }
+          - { name: ein_eyebrow, label: עין הבדולח - כותרת קטנה, widget: string }
+          - { name: ein_title, label: עין הבדולח - כותרת, widget: string }
+          - { name: ein_body, label: עין הבדולח - הסבר (אם ריק, הקטע לא יוצג), widget: text, required: false }
+          - { name: treat_eyebrow, label: טיפולים - כותרת קטנה, widget: string }
+          - { name: treat_title, label: טיפולים - כותרת, widget: string }
+          - { name: process_eyebrow, label: תהליך - כותרת קטנה, widget: string }
+          - { name: process_title, label: תהליך - כותרת, widget: string }
+          - { name: process_note, label: תהליך - הערה (מחיר), widget: string }
+          - { name: gallery_eyebrow, label: גלריה - כותרת קטנה, widget: string }
+          - { name: gallery_title, label: גלריה - כותרת, widget: string }
+          - { name: quotes_eyebrow, label: המלצות - כותרת קטנה, widget: string }
+          - { name: quotes_title, label: המלצות - כותרת, widget: string }
+          - { name: faq_eyebrow, label: שאלות - כותרת קטנה, widget: string }
+          - { name: faq_title, label: שאלות - כותרת, widget: string }
+          - { name: contact_eyebrow, label: יצירת קשר - כותרת קטנה, widget: string }
+          - { name: contact_title, label: יצירת קשר - כותרת, widget: string }
+          - { name: contact_text, label: יצירת קשר - טקסט, widget: text }
+          - { name: address, label: כתובת הקליניקה, widget: string }
+          - { name: footer_note, label: טקסט בתחתית, widget: string }
+
+  - name: lists
+    label: רשימות
+    files:
+      - name: treatments
+        label: הטיפולים
+        file: content/treatments.json
+        format: json
+        fields:
+          - name: items
+            label: טיפולים
+            widget: list
+            fields:
+              - { name: title, label: שם הטיפול, widget: string }
+              - { name: text, label: תיאור, widget: text }
+      - name: process
+        label: שלבי התהליך
+        file: content/process.json
+        format: json
+        fields:
+          - name: items
+            label: שלבים
+            widget: list
+            fields:
+              - { name: title, label: כותרת, widget: string }
+              - { name: text, label: תיאור, widget: text }
+      - name: faq
+        label: שאלות ותשובות
+        file: content/faq.json
+        format: json
+        fields:
+          - name: items
+            label: שאלות
+            widget: list
+            fields:
+              - { name: q, label: שאלה, widget: string }
+              - { name: a, label: תשובה, widget: text }
+      - name: testimonials
+        label: המלצות (מוצגות רק כשיש לפחות אחת)
+        file: content/testimonials.json
+        format: json
+        fields:
+          - name: items
+            label: המלצות
+            widget: list
+            fields:
+              - { name: text, label: ההמלצה, widget: text }
+              - { name: name, label: שם, widget: string }
+              - { name: place, label: יישוב, widget: string, required: false }
+      - name: gallery
+        label: גלריה (מוצגת רק כשיש פריטים)
+        file: content/gallery.json
+        format: json
+        fields:
+          - name: items
+            label: פריטים
+            widget: list
+            fields:
+              - { name: image, label: תמונה, widget: image, required: false }
+              - { name: video, label: קובץ וידאו (אופציונלי), widget: file, required: false }
+              - { name: caption, label: כיתוב, widget: string, required: false }
