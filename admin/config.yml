@@ -33,7 +33,8 @@ collections:
             name: "header"
             widget: "object"
             fields:
-              - { label: "שם בראש הדף", name: "brand", widget: "string" }
+              - { label: "שם בראש הדף (מימין)", name: "brand", widget: "string" }
+              - { label: "שם העסק בראש הדף (משמאל)", name: "badge", widget: "string" }
 
           - label: "מסך פתיחה (למעלה)"
             name: "hero"

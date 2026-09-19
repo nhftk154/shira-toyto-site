@@ -44,7 +44,7 @@ window.contentReady = (async () => {
   if (contact) {
     document.querySelectorAll('[data-wa]').forEach(a => { a.href = waLink(contact.whatsappText); });
     if (digits) document.querySelectorAll('[data-phone]').forEach(a => { a.href = `tel:${digits}`; });
-    document.querySelectorAll('.top__call,[data-phone-text]').forEach(a => { a.textContent = contact.phoneDisplay || contact.phone; });
+    document.querySelectorAll('[data-phone-text]').forEach(a => { a.textContent = contact.phoneDisplay || contact.phone; });
     document.querySelectorAll('[data-i="address"]').forEach(a => { a.textContent = contact.address || ''; });
   }
 
