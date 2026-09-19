@@ -52,7 +52,7 @@
   let lastY = scrollY;
   const barCheck = () => {
     const y = scrollY;
-    const past = heroEl.getBoundingClientRect().bottom < 120;
+    const past = heroEl.getBoundingClientRect().bottom < -90;   // dark only once the pill sits over the dark sections
     bar.classList.toggle('is-stuck', y > 40);
     bar.classList.toggle('is-dark', past);
     if (!past || y < lastY - 4) bar.classList.remove('is-hidden');
