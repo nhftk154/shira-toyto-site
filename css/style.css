@@ -293,9 +293,7 @@ main:focus{outline:none}
 .anim-toggle[aria-pressed="true"]{background:var(--amethyst);color:#fff}
 .anim-off .t-col-inner{animation-play-state:paused!important}
 .anim-off .hero__hint span{animation:none}
-.map__gate{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;color:var(--ice);font-size:.95rem;line-height:1.6}
-.map__gate p{max-width:34ch}
-.map__ext{color:var(--gold);text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}
+.map__ext{position:absolute;inset-inline-start:12px;bottom:12px;z-index:2;padding:6px 12px;border-radius:999px;background:rgba(26,16,48,.85);color:var(--gold);text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}
 .foot__disc{max-width:70ch;line-height:1.6;font-size:.82rem}
 .legal h1+p{margin-top:8px}
 

@@ -53,15 +53,11 @@ window.contentReady = (async () => {
     document.querySelectorAll('[data-phone-text]').forEach(a => { a.textContent = contact.phoneDisplay || contact.phone; });
     document.querySelectorAll('[data-i="address"]').forEach(a => { a.textContent = contact.address || ''; });
 
-    // map: Google Maps loads only after the visitor clicks (no Google request or cookies before that)
+    // map: Google Maps embed always loads (lazily), plus a plain link as an alternative
     const mq = (contact.mapQuery || '').trim();
     if (mq) {
       $('mapExt').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mq)}`;
-      $('mapLoad').onclick = () => {
-        $('mapFrame').src = `https://maps.google.com/maps?q=${encodeURIComponent(mq)}&z=15&hl=he&output=embed`;
-        $('mapFrame').hidden = false;
-        $('mapGate').hidden = true;
-      };
+      $('mapFrame').src = `https://maps.google.com/maps?q=${encodeURIComponent(mq)}&z=15&hl=he&output=embed`;
       $('mapBox').hidden = false;
     } else {
       $('cbox').classList.add('no-map');

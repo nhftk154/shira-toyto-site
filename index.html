@@ -154,12 +154,8 @@
           </div>
         </div>
         <div class="cbox__map" id="mapBox" hidden>
-          <div class="map__gate" id="mapGate">
-            <p>המפה נטענת משירות Google, שעשוי לקבל מידע טכני עליכם (כגון כתובת IP) ולשמור עוגיות. היא תיטען רק אם תאשרו.</p>
-            <button type="button" class="btn btn--ghost-light" id="mapLoad">הצגת המפה</button>
-            <a class="map__ext" id="mapExt" href="#" target="_blank" rel="noopener">פתיחה ב-Google Maps<span class="sr"> (נפתח בחלון חדש)</span></a>
-          </div>
-          <iframe id="mapFrame" title="מפת האזור" referrerpolicy="no-referrer-when-downgrade" allowfullscreen hidden></iframe>
+          <iframe id="mapFrame" title="מפת האזור" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <a class="map__ext" id="mapExt" href="#" target="_blank" rel="noopener">פתיחה ב-Google Maps<span class="sr"> (נפתח בחלון חדש)</span></a>
         </div>
       </div>
     </div>
