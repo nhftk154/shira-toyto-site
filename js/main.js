@@ -33,8 +33,10 @@
     imgs[i] = im;
   };
 
-  // the reveal plays on load, so all frames are requested right away (in order)
-  for (let i = 0; i < FRAMES; i++) load(i);
+  load(0);
+  load(FRAMES - 1);
+  const rest = () => { for (let i = 1; i < FRAMES - 1; i++) load(i); };
+  ('requestIdleCallback' in window) ? requestIdleCallback(rest, { timeout: 1200 }) : setTimeout(rest, 400);
 
   const copy = document.getElementById('heroCopy');
   const glow = document.querySelector('.hero__glow');
@@ -70,38 +72,25 @@
     return;
   }
 
-  /* ---------- smooth scroll ---------- */
+  /* ---------- smooth scroll + scrubbed hero ---------- */
   gsap.registerPlugin(ScrollTrigger);
   const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  /* ---------- hero intro: the reveal plays by itself on load; scrolling adds a gentle parallax ---------- */
-  const logoEl = document.getElementById('logo');
-  const intro = { p: 0 };
-  if (scrollY > 40) {                       // reloaded mid-page: skip the intro
-    target = FRAMES - 1; draw(target);
-    gsap.set([glow, copy], { opacity: 1, y: 0 });
-    gsap.set(hint, { opacity: 0 });
-  } else {
-    gsap.set(logoEl, { opacity: 0 });       // hides the blank first frame
-    const firstHalf = imgs.slice(0, Math.ceil(FRAMES / 2)).map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
-    Promise.race([Promise.all(firstHalf), new Promise(r => setTimeout(r, 1600))]).then(() => {
-      gsap.to(logoEl, { opacity: 1, duration: 0.5 });
-      gsap.to(glow, { opacity: 1, duration: 2.4, delay: 0.8 });
-      gsap.to(intro, {
-        p: 1, duration: 3, ease: 'power1.inOut',
-        onUpdate() { target = Math.round(intro.p * (FRAMES - 1)); draw(target); }
-      });
-      gsap.to(copy, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 2.2 });
-      gsap.to(hint, { opacity: 0, duration: 0.4, delay: 2.2 });
-    });
-  }
-  gsap.to(logoEl, {
-    scale: 0.9, ease: 'none',
-    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom bottom', scrub: 0.5 }
+  const tl = gsap.timeline({ scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+  tl.to({}, { duration: 1 }, 0);
+  ScrollTrigger.create({
+    trigger: '#hero', start: 'top top', end: 'bottom bottom',
+    onUpdate: s => {
+      target = Math.round(Math.min(1, s.progress / 0.62) * (FRAMES - 1));
+      draw(target);
+    }
   });
+  tl.to(glow, { opacity: 1, duration: 0.3 }, 0.25)
+    .to(copy, { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, 0.62)
+    .to(hint, { opacity: 0, duration: 0.08 }, 0.02);
 
   /* ---------- section reveals (after content has been rendered) ---------- */
   (window.contentReady || Promise.resolve()).then(() => {
