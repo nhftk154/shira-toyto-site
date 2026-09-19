@@ -18,7 +18,7 @@ python3 -m http.server 5173
 4. לחבר דומיין אם רוצים (קובץ CNAME).
 
 ## נשאר לעשות (לחזור לזה)
-- [ ] **OAuth proxy לאדמין:** ליצור GitHub OAuth App ייעודי, לפרוס את `oauth-worker/` ל-Cloudflare, להגדיר את הסודות ולעדכן `base_url` ב-`admin/config.yml` (ראו הסעיף למטה). עד אז `/admin` לא מתחבר.
+- [ ] **OAuth proxy לאדמין:** ה-Worker פרוס (`shira-toyto-cms-auth.nhftk154.workers.dev`). נשאר להגדיר את הסודות `OAUTH_CLIENT_ID` ו-`OAUTH_CLIENT_SECRET` עם `npx wrangler secret put`, ולבדוק כניסה ל-`/admin`.
 - [ ] **הרשאת עריכה לאמא:** חשבון GitHub משלה והוספה כ-collaborator בריפו.
 - [ ] **הסבר על "כלי-ניקה עין הבדולח":** למלא באדמין בשדה "עין הבדולח - הסבר". עד אז הקטע מוסתר.
 - [ ] **המלצות אמיתיות, תמונות וסרטונים של הקליניקה:** להוסיף באדמין. עד אז הסקשנים מוסתרים.

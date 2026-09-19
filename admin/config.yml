@@ -4,7 +4,7 @@ backend:
   name: github
   repo: nhftk154/shira-toyto-site
   branch: main
-  base_url: https://REPLACE-WITH-OWN-OAUTH-PROXY.workers.dev
+  base_url: https://shira-toyto-cms-auth.nhftk154.workers.dev
   commit_messages:
     create: 'תוכן: יצירת {{collection}} "{{slug}}"'
     update: 'תוכן: עדכון {{collection}} "{{slug}}"'
