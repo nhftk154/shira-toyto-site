@@ -121,6 +121,14 @@
   })();
   let W, H, parts = [];
   let heroVisible = true;
+  let animOff = false;
+  const animBtn = document.getElementById('animToggle');
+  animBtn.addEventListener('click', () => {
+    animOff = !animOff;
+    document.documentElement.classList.toggle('anim-off', animOff);
+    animBtn.setAttribute('aria-pressed', String(animOff));
+    animBtn.textContent = animOff ? 'הפעלת אנימציות' : 'עצירת אנימציות';
+  });
   new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe(heroEl);
   const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
   const fit = () => {
@@ -142,7 +150,7 @@
   };
   fit(); addEventListener('resize', fit);
   const tick = () => {
-    if (heroVisible) {
+    if (heroVisible && !animOff) {
       sx.clearRect(0, 0, W, H);
       for (const p of parts) {
         p.y -= p.v; p.x += p.sway; p.a += p.s;

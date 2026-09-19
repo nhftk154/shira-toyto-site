@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /admin/
+Sitemap: https://nhftk154.github.io/shira-toyto-site/sitemap.xml
