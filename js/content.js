@@ -91,7 +91,6 @@ window.contentReady = (async () => {
       who.append(el('div', 't-name', t.name || ''), el('div', 't-meta', t.meta || ''));
       a.append(el('span', 't-avatar', (t.name || '').trim().charAt(0)), who);
       c.append(el('div', 't-quote', '\u201D'), el('p', null, t.quote));
-      if (t.sample) c.append(el('span', 't-tag', 'לדוגמה'));
       c.append(a);
       return c;
     };
@@ -110,7 +109,6 @@ window.contentReady = (async () => {
       cols.append(col);
     });
     q.forEach(t => $('tSr').append(el('li', null, `${t.quote} \u2014 ${t.name || ''}${t.meta ? ', ' + t.meta : ''}`)));
-    if (q.some(t => t.sample)) $('tSample').hidden = false;
     $('quotes').hidden = false;
   }
 
