@@ -80,17 +80,39 @@ window.contentReady = (async () => {
     $('faqList').append(d);
   });
 
-  /* ---- testimonials (hidden until at least one exists) ---- */
-  const q = items(quotes);
-  q.forEach(t => {
-    const b = el('blockquote', 'quote reveal');
-    b.append(el('p', null, `“${t.quote}”`));
-    const cap = el('footer', null);
-    cap.append(el('strong', null, t.name || ''), el('span', null, t.meta ? ` · ${t.meta}` : ''));
-    b.append(cap);
-    $('quoteList').append(b);
-  });
-  if (q.length) $('quotes').hidden = false;
+  /* ---- testimonials: auto-scrolling wall (hidden until at least one exists) ---- */
+  const q = items(quotes).filter(t => t && t.quote);
+  if (q.length) {
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const card = t => {
+      const c = el('article', 't-card');
+      const a = el('div', 't-author');
+      const who = el('div');
+      who.append(el('div', 't-name', t.name || ''), el('div', 't-meta', t.meta || ''));
+      a.append(el('span', 't-avatar', (t.name || '').trim().charAt(0)), who);
+      c.append(el('div', 't-quote', '\u201D'), el('p', null, t.quote));
+      if (t.sample) c.append(el('span', 't-tag', 'לדוגמה'));
+      c.append(a);
+      return c;
+    };
+    const dirs = reduceMotion ? ['static'] : ['down', 'up', 'down'];
+    const cols = $('tCols');
+    if (reduceMotion) cols.classList.add('is-static');
+    dirs.forEach((dir, ci) => {
+      // rotate the list per column so the three columns do not show identical rows
+      const list = q.map((_, i) => q[(i + ci * 2) % q.length]);
+      const inner = el('div', `t-col-inner dir-${dir}`);
+      inner.style.setProperty('--dur', `${Math.max(24, q.length * 9)}s`);
+      list.forEach(t => inner.append(card(t)));
+      if (!reduceMotion) list.forEach(t => inner.append(card(t)));   // doubled for a seamless loop
+      const col = el('div', 't-col');
+      col.append(inner);
+      cols.append(col);
+    });
+    q.forEach(t => $('tSr').append(el('li', null, `${t.quote} \u2014 ${t.name || ''}${t.meta ? ', ' + t.meta : ''}`)));
+    if (q.some(t => t.sample)) $('tSample').hidden = false;
+    $('quotes').hidden = false;
+  }
 
   /* ---- gallery (hidden until images exist) ---- */
   const g = items(gallery).filter(Boolean);

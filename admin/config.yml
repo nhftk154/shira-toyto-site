@@ -223,6 +223,12 @@ collections:
               - { label: "תוכן ההמלצה", name: "quote", widget: "text" }
               - { label: "שם", name: "name", widget: "string" }
               - { label: "פרטים נוספים (יישוב וכו')", name: "meta", widget: "string", required: false }
+              - label: "המלצת דוגמה (מסומנת באתר כ'לדוגמה')"
+                name: "sample"
+                widget: "boolean"
+                default: false
+                hint: "כל המלצה אמיתית צריכה להיות כבויה. כשאין המלצות דוגמה באתר, התווית נעלמת."
+
 
   - name: "gallery"
     label: "גלריית תמונות"
