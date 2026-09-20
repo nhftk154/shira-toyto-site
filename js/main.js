@@ -76,44 +76,65 @@
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  /* ---------- hero: the video plays once by itself on load and stops on the last frame ---------- */
+  /* ---------- hero: the video plays by itself on load, stops on the last frame, and replays when you come back to the top ---------- */
   const logoEl = document.getElementById('logo');
   const F0 = Math.round((FRAMES - 1) * 0.1);   // skip the blank first moments of the video
   const intro = { p: 0 };
-  if (scrollY > 40) {                       // reloaded mid-page: skip the intro
-    target = FRAMES - 1; draw(target);
-    gsap.set([glow, copy], { opacity: 1, y: 0 });
-    gsap.set(hint, { opacity: 0 });
-  } else {
-    gsap.set(logoEl, { opacity: 0 });       // hides the blank first frame
-    const firstHalf = imgs.slice(0, Math.ceil(FRAMES / 2)).map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
-    Promise.race([Promise.all(firstHalf), new Promise(r => setTimeout(r, 1600))]).then(() => {
-      gsap.to(logoEl, { opacity: 1, duration: 0.5 });
-      gsap.to(glow, { opacity: 1, duration: 2.4, delay: 0.8 });
-      gsap.to(intro, {
+  let introTl = null;
+
+  const resetIntro = () => {                    // back to the empty starting state
+    if (introTl) { introTl.kill(); introTl = null; }
+    intro.p = 0; target = F0; current = -1;
+    gsap.set(logoEl, { opacity: 0 });
+    gsap.set(glow, { opacity: 0 });
+    gsap.set(copy, { opacity: 0, y: 24 });
+  };
+  const playIntro = () => {
+    resetIntro();
+    introTl = gsap.timeline()
+      .to(logoEl, { opacity: 1, duration: 0.5 }, 0)
+      .to(glow, { opacity: 1, duration: 2.4 }, 0.8)
+      .to(intro, {
         p: 1, duration: 3.4, ease: 'none',
         onUpdate() { target = Math.round(F0 + intro.p * (FRAMES - 1 - F0)); draw(target); }
-      });
-      gsap.to(copy, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 2.7 });
-      gsap.to(hint, { opacity: 0, duration: 0.4, delay: 2.2 });
-    });
+      }, 0)
+      .to(copy, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 2.7);
+  };
+
+  if (scrollY > 40) {                            // reloaded mid-page: show the finished hero
+    target = FRAMES - 1; draw(target);
+    gsap.set([glow, copy], { opacity: 1, y: 0 });
+    gsap.set(logoEl, { opacity: 1 });
+  } else {
+    gsap.set(logoEl, { opacity: 0 });            // hides the blank first frame
+    const firstHalf = imgs.slice(0, Math.ceil(FRAMES / 2)).map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
+    Promise.race([Promise.all(firstHalf), new Promise(r => setTimeout(r, 1600))]).then(playIntro);
   }
+
+  // scrolling far away resets the hero silently; coming back to the top plays the video again
+  let away = scrollY > innerHeight * 0.6;
+  addEventListener('scroll', () => {
+    const y = scrollY;
+    if (!away && y > innerHeight * 0.6) { away = true; resetIntro(); }
+    else if (away && y < innerHeight * 0.25) { away = false; playIntro(); }
+  }, { passive: true });
+
   gsap.to(logoEl, {
     scale: 0.9, ease: 'none',
     scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.5 }
   });
 
-  /* ---------- section reveals (after content has been rendered) ---------- */
+  /* ---------- section reveals: build in while scrolling down, fade back out when scrolling up ---------- */
   (window.contentReady || Promise.resolve()).then(() => {
     gsap.utils.toArray('.reveal').forEach(n => {
       gsap.from(n, {
         y: 34, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: n, start: 'top 90%', once: true }
+        scrollTrigger: { trigger: n, start: 'top 90%', toggleActions: 'play none none reverse' }
       });
     });
     gsap.from('.card', {
       y: 40, opacity: 0, duration: 0.8, stagger: 0.09, ease: 'power3.out',
-      scrollTrigger: { trigger: '#rail', start: 'top 88%', once: true }
+      scrollTrigger: { trigger: '#rail', start: 'top 88%', toggleActions: 'play none none reverse' }
     });
     ScrollTrigger.refresh();
   });
