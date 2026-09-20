@@ -2,7 +2,6 @@
   // phones get a lighter sequence (30 frames at 540px, about a third of the download)
   const SMALL = matchMedia('(max-width: 699px)').matches;
   const FRAMES = SMALL ? 30 : 60;
-  const START = Math.round((FRAMES - 1) * 0.36);   // first screen already shows the outline of the crystal
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) document.getElementById('animToggle').hidden = true;
   const src = i => `assets/${SMALL ? 'frames-sm' : 'frames'}/f${String(i + 1).padStart(3, '0')}.jpg`;
@@ -12,7 +11,7 @@
   const ctx = canvas.getContext('2d');
   const imgs = new Array(FRAMES);
   let current = -1;
-  let target = START;
+  let target = 0;
 
   const draw = i => {
     let k = i; // nearest loaded frame at or below i
@@ -34,11 +33,8 @@
     imgs[i] = im;
   };
 
-  load(0);
-  load(START);
-  load(FRAMES - 1);
-  const rest = () => { for (let i = 1; i < FRAMES - 1; i++) load(i); };
-  ('requestIdleCallback' in window) ? requestIdleCallback(rest, { timeout: 1200 }) : setTimeout(rest, 400);
+  // the reveal plays on load, so all frames are requested right away (in order)
+  for (let i = 0; i < FRAMES; i++) load(i);
 
   const copy = document.getElementById('heroCopy');
   const glow = document.querySelector('.hero__glow');
@@ -47,7 +43,7 @@
   const heroEl = document.getElementById('hero');
 
   // the hero has its own CTAs, so the floating button appears only after it
-  const fabCheck = () => fab.classList.toggle('is-hidden', heroEl.getBoundingClientRect().bottom > innerHeight * 1.05);
+  const fabCheck = () => fab.classList.toggle('is-hidden', heroEl.getBoundingClientRect().bottom > innerHeight * 0.55);
   fab.classList.add('is-hidden');
   addEventListener('scroll', fabCheck, { passive: true });
 
@@ -67,32 +63,45 @@
   barCheck();
 
   if (reduce) {
-    fab.classList.remove('is-hidden');
     const last = imgs[FRAMES - 1];
     const show = () => { target = FRAMES - 1; draw(FRAMES - 1); };
     last.complete && last.naturalWidth ? show() : last.addEventListener('load', show);
     return;
   }
 
-  /* ---------- smooth scroll + scrubbed hero ---------- */
+  /* ---------- smooth scroll ---------- */
   gsap.registerPlugin(ScrollTrigger);
   const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  const tl = gsap.timeline({ scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
-  tl.to({}, { duration: 1 }, 0);
-  ScrollTrigger.create({
-    trigger: '#hero', start: 'top top', end: 'bottom bottom',
-    onUpdate: s => {
-      target = START + Math.round(Math.min(1, s.progress / 0.62) * (FRAMES - 1 - START));
-      draw(target);
-    }
+  /* ---------- hero: the video plays once by itself on load and stops on the last frame ---------- */
+  const logoEl = document.getElementById('logo');
+  const F0 = Math.round((FRAMES - 1) * 0.1);   // skip the blank first moments of the video
+  const intro = { p: 0 };
+  if (scrollY > 40) {                       // reloaded mid-page: skip the intro
+    target = FRAMES - 1; draw(target);
+    gsap.set([glow, copy], { opacity: 1, y: 0 });
+    gsap.set(hint, { opacity: 0 });
+  } else {
+    gsap.set(logoEl, { opacity: 0 });       // hides the blank first frame
+    const firstHalf = imgs.slice(0, Math.ceil(FRAMES / 2)).map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
+    Promise.race([Promise.all(firstHalf), new Promise(r => setTimeout(r, 1600))]).then(() => {
+      gsap.to(logoEl, { opacity: 1, duration: 0.5 });
+      gsap.to(glow, { opacity: 1, duration: 2.4, delay: 0.8 });
+      gsap.to(intro, {
+        p: 1, duration: 3.4, ease: 'none',
+        onUpdate() { target = Math.round(F0 + intro.p * (FRAMES - 1 - F0)); draw(target); }
+      });
+      gsap.to(copy, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 2.7 });
+      gsap.to(hint, { opacity: 0, duration: 0.4, delay: 2.2 });
+    });
+  }
+  gsap.to(logoEl, {
+    scale: 0.9, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.5 }
   });
-  tl.to(glow, { opacity: 1, duration: 0.3 }, 0.25)
-    .to(copy, { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, 0.62)
-    .to(hint, { opacity: 0, duration: 0.08 }, 0.02);
 
   /* ---------- section reveals (after content has been rendered) ---------- */
   (window.contentReady || Promise.resolve()).then(() => {
