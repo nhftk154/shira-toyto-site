@@ -10,25 +10,39 @@
   const canvas = document.getElementById('logo');
   const ctx = canvas.getContext('2d');
   const imgs = new Array(FRAMES);
-  let current = -1;
+  let lastKey = '';
   let target = 0;
 
-  const draw = i => {
-    let k = i; // nearest loaded frame at or below i
-    while (k > 0 && !(imgs[k] && imgs[k].complete && imgs[k].naturalWidth)) k--;
-    const im = imgs[k];
-    if (!im || !im.naturalWidth || k === current) return;
-    current = k;
+  const loaded = i => imgs[i] && imgs[i].complete && imgs[i].naturalWidth;
+  const pick = i => { let k = Math.min(i, FRAMES - 1); while (k > 0 && !loaded(k)) k--; return loaded(k) ? imgs[k] : null; };
+
+  // pos may be fractional: the two neighbouring frames are cross-faded, so the low frame rate on phones looks smooth
+  const draw = pos => {
+    const a = Math.floor(pos), t = pos - a;
+    const key = a + ':' + Math.round(t * 12);
+    if (key === lastKey) return;
+    const A = pick(a);
+    if (!A) return;
+    lastKey = key;
+    ctx.globalAlpha = 1;
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(im, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(A, 0, 0, canvas.width, canvas.height);
+    if (t > 0.04 && a < FRAMES - 1) {
+      const B = pick(a + 1);
+      if (B && B !== A) {
+        ctx.globalAlpha = t;
+        ctx.drawImage(B, 0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1;
+      }
+    }
   };
 
   const load = i => {
     if (imgs[i]) return;
     const im = new Image();
     im.decoding = 'async';
-    im.onload = () => { if (i === target) draw(i); };
+    im.onload = () => { if (i === Math.floor(target)) draw(target); };
     im.src = src(i);
     imgs[i] = im;
   };
@@ -84,7 +98,7 @@
 
   const resetIntro = () => {                    // back to the empty starting state
     if (introTl) { introTl.kill(); introTl = null; }
-    intro.p = 0; target = F0; current = -1;
+    intro.p = 0; target = F0; lastKey = '';
     gsap.set(logoEl, { opacity: 0 });
     gsap.set(glow, { opacity: 0 });
     gsap.set(copy, { opacity: 0, y: 24 });
@@ -96,7 +110,7 @@
       .to(glow, { opacity: 1, duration: 2.4 }, 0.8)
       .to(intro, {
         p: 1, duration: 3.4, ease: 'none',
-        onUpdate() { target = Math.round(F0 + intro.p * (FRAMES - 1 - F0)); draw(target); }
+        onUpdate() { target = F0 + intro.p * (FRAMES - 1 - F0); draw(target); }
       }, 0)
       .to(copy, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 2.7);
   };
@@ -107,8 +121,13 @@
     gsap.set(logoEl, { opacity: 1 });
   } else {
     gsap.set(logoEl, { opacity: 0 });            // hides the blank first frame
-    const firstHalf = imgs.slice(0, Math.ceil(FRAMES / 2)).map(im => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
-    Promise.race([Promise.all(firstHalf), new Promise(r => setTimeout(r, 1600))]).then(playIntro);
+    // wait until all frames have arrived and are decoded (at most 2.5s), so the video does not stutter
+    const ready = Promise.all(imgs.map(im => new Promise(res => {
+      const done = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(res);
+      if (im.complete && im.naturalWidth) done();
+      else { im.addEventListener('load', done, { once: true }); im.addEventListener('error', res, { once: true }); }
+    })));
+    Promise.race([ready, new Promise(r => setTimeout(r, 2500))]).then(playIntro);
   }
 
   // scrolling far away resets the hero silently; coming back to the top plays the video again
@@ -166,9 +185,9 @@
   new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe(heroEl);
   const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
   const fit = () => {
-    const d = Math.min(devicePixelRatio || 1, 2);
+    const d = Math.min(devicePixelRatio || 1, SMALL ? 1.25 : 2);
     W = sc.width = sc.clientWidth * d; H = sc.height = sc.clientHeight * d;
-    const n = innerWidth < 700 ? 26 : 46;
+    const n = innerWidth < 700 ? 16 : 46;
     parts = Array.from({ length: n }, (_, i) => {
       const bokeh = i % 6 === 0;
       const near = Math.random() < 0.65;   // most dust gathers around the eye, the rest drifts across the page

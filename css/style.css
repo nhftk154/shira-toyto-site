@@ -70,6 +70,7 @@ a{color:inherit;text-decoration:none}
 .hero__logo{width:100%;height:100%;display:block;-webkit-mask-image:linear-gradient(to right,transparent,#000 13%,#000 87%,transparent),linear-gradient(to bottom,transparent,#000 13%,#000 87%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 13%,#000 87%,transparent),linear-gradient(to bottom,transparent,#000 13%,#000 87%,transparent);mask-composite:intersect}
 
 .hero__copy{
+  will-change:opacity,transform;
   position:absolute;inset-inline:var(--gutter);bottom:calc(env(safe-area-inset-bottom) + 28px);
   display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;
   opacity:0;transform:translateY(24px);
