@@ -59,6 +59,7 @@ window.contentReady = (async () => {
       $('mapExt').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mq)}`;
       $('mapFrame').src = `https://maps.google.com/maps?q=${encodeURIComponent(mq)}&z=15&hl=he&output=embed`;
       $('mapBox').hidden = false;
+      $('mapBox').addEventListener('click', () => $('mapBox').classList.add('is-active'));   // touch: first tap enables the map, so it never traps page scrolling
     } else {
       $('cbox').classList.add('no-map');
     }

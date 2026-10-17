@@ -57,24 +57,34 @@
   const heroEl = document.getElementById('hero');
 
   // the hero has its own CTAs, so the floating button appears only after it
-  const fabCheck = () => fab.classList.toggle('is-hidden', heroEl.getBoundingClientRect().bottom > innerHeight * 0.55);
+  const fabCheck = heroBottom => fab.classList.toggle('is-hidden', heroBottom > innerHeight * 0.55);
   fab.classList.add('is-hidden');
-  addEventListener('scroll', fabCheck, { passive: true });
 
   // floating header: transparent on the hero, glass after; dark over dark sections; hides when scrolling down
   const bar = document.getElementById('top');
   let lastY = scrollY;
-  const barCheck = () => {
+  const barCheck = heroBottom => {
     const y = scrollY;
-    const past = heroEl.getBoundingClientRect().bottom < -90;   // dark only once the pill sits over the dark sections
+    const past = heroBottom < -90;   // dark only once the pill sits over the dark sections
     bar.classList.toggle('is-stuck', y > 40);
     bar.classList.toggle('is-dark', past);
     if (!past || y < lastY - 4) bar.classList.remove('is-hidden');
     else if (y > lastY + 4) bar.classList.add('is-hidden');
     lastY = y;
   };
-  addEventListener('scroll', barCheck, { passive: true });
-  barCheck();
+  // a single scroll listener, throttled to one run per frame, reads the hero position once for everything
+  const scrollFns = [fabCheck, barCheck];
+  let ticking = false;
+  addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      const hb = heroEl.getBoundingClientRect().bottom;
+      scrollFns.forEach(fn => fn(hb));
+    });
+  }, { passive: true });
+  barCheck(heroEl.getBoundingClientRect().bottom);
 
   if (reduce) {
     const last = imgs[FRAMES - 1];
@@ -112,7 +122,7 @@
         p: 1, duration: 3.4, ease: 'none',
         onUpdate() { target = F0 + intro.p * (FRAMES - 1 - F0); draw(target); }
       }, 0)
-      .to(copy, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 2.7);
+      .to(copy, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 1.4);
   };
 
   if (scrollY > 40) {                            // reloaded mid-page: show the finished hero
@@ -121,22 +131,22 @@
     gsap.set(logoEl, { opacity: 1 });
   } else {
     gsap.set(logoEl, { opacity: 0 });            // hides the blank first frame
-    // wait until all frames have arrived and are decoded (at most 2.5s), so the video does not stutter
+    // wait until all frames have arrived and are decoded (at most 1.8s), so the video does not stutter
     const ready = Promise.all(imgs.map(im => new Promise(res => {
       const done = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(res);
       if (im.complete && im.naturalWidth) done();
       else { im.addEventListener('load', done, { once: true }); im.addEventListener('error', res, { once: true }); }
     })));
-    Promise.race([ready, new Promise(r => setTimeout(r, 2500))]).then(playIntro);
+    Promise.race([ready, new Promise(r => setTimeout(r, 1800))]).then(playIntro);
   }
 
   // scrolling far away resets the hero silently; coming back to the top plays the video again
   let away = scrollY > innerHeight * 0.6;
-  addEventListener('scroll', () => {
+  scrollFns.push(() => {
     const y = scrollY;
     if (!away && y > innerHeight * 0.6) { away = true; resetIntro(); }
     else if (away && y < innerHeight * 0.25) { away = false; playIntro(); }
-  }, { passive: true });
+  });
 
   gsap.to(logoEl, {
     scale: 0.9, ease: 'none',
@@ -181,8 +191,9 @@
     document.documentElement.classList.toggle('anim-off', animOff);
     animBtn.setAttribute('aria-pressed', String(animOff));
     animBtn.textContent = animOff ? 'הפעלת אנימציות' : 'עצירת אנימציות';
+    kick();
   });
-  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe(heroEl);
+  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; kick(); }).observe(heroEl);
   const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
   const fit = () => {
     const d = Math.min(devicePixelRatio || 1, SMALL ? 1.25 : 2);
@@ -202,17 +213,19 @@
     });
   };
   fit(); addEventListener('resize', fit);
+  let raf = 0;
   const tick = () => {
-    if (heroVisible && !animOff) {
-      sx.clearRect(0, 0, W, H);
-      for (const p of parts) {
-        p.y -= p.v; p.x += p.sway; p.a += p.s;
-        if (p.y < -p.size) { p.y = H + p.size; p.x = Math.random() * W; }
-        sx.globalAlpha = (Math.sin(p.a) * .5 + .5) * p.peak;
-        sx.drawImage(sprite, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-      }
+    raf = 0;
+    if (!heroVisible || animOff) return;   // sleep; kick() wakes the loop
+    sx.clearRect(0, 0, W, H);
+    for (const p of parts) {
+      p.y -= p.v; p.x += p.sway; p.a += p.s;
+      if (p.y < -p.size) { p.y = H + p.size; p.x = Math.random() * W; }
+      sx.globalAlpha = (Math.sin(p.a) * .5 + .5) * p.peak;
+      sx.drawImage(sprite, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
     }
-    requestAnimationFrame(tick);
+    raf = requestAnimationFrame(tick);
   };
-  tick();
+  function kick() { if (!raf && heroVisible && !animOff) raf = requestAnimationFrame(tick); }
+  kick();
 })();
