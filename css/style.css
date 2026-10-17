@@ -13,7 +13,7 @@
   --maxw:1080px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto}
 body{
@@ -21,6 +21,9 @@ body{
   overflow-x:hidden;-webkit-font-smoothing:antialiased;
 }
 a{color:inherit;text-decoration:none}
+a,button,summary{touch-action:manipulation}
+button,.btn,.top__call,.card__cta,.qa summary{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.card__cta:active,.qa summary:active{opacity:.75}
 .skip{position:absolute;inset-inline-start:8px;top:-60px;background:var(--amethyst);color:#fff;padding:10px 14px;border-radius:8px;z-index:100}
 .skip:focus{top:8px}
 :focus-visible{outline:3px solid var(--amethyst-2);outline-offset:3px;border-radius:6px}
@@ -44,7 +47,7 @@ a{color:inherit;text-decoration:none}
 .top.is-dark .top__call{color:#F6E7C4;border-color:rgba(217,178,111,.5)}
 .top.is-hidden{transform:translate(-50%,-160%)}
 .top__brand{white-space:nowrap;font-family:var(--f-head);font-weight:500;letter-spacing:.02em;color:var(--amethyst)}
-.top__call{font-weight:500;color:var(--amethyst);font-size:.9rem;padding:8px 16px;border-radius:999px;border:1px solid rgba(75,42,123,.25);min-height:40px;display:inline-flex;align-items:center;transition:color .35s,border-color .35s}
+.top__call{font-weight:500;color:var(--amethyst);font-size:.9rem;padding:8px 16px;border-radius:999px;border:1px solid rgba(75,42,123,.25);min-height:44px;display:inline-flex;align-items:center;transition:color .35s,border-color .35s}
 
 @media (max-width:359px){.top{padding-inline:14px 6px}.top__call{padding:8px 12px;font-size:.82rem}}
 
@@ -183,7 +186,7 @@ a{color:inherit;text-decoration:none}
 .t-col-inner{display:flex;flex-direction:column;will-change:transform;animation:t-down var(--dur,40s) linear infinite}
 .t-col-inner.dir-up{animation-name:t-up}
 .t-col-inner.dir-static{animation:none}
-.t-col:hover .t-col-inner{animation-play-state:paused}
+@media (hover:hover){.t-col:hover .t-col-inner{animation-play-state:paused}}
 @keyframes t-down{from{transform:translateY(0)}to{transform:translateY(-50%)}}
 @keyframes t-up{from{transform:translateY(-50%)}to{transform:translateY(0)}}
 .t-card{
@@ -224,6 +227,7 @@ a{color:inherit;text-decoration:none}
 .btn--ghost-light span[data-phone-text]{direction:ltr}
 .cbox__map{position:relative;min-height:320px;background:#0d0719}
 .cbox__map iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (hover:none){.cbox__map:not(.is-active) iframe{pointer-events:none}}
 .cbox.no-map{max-width:640px;margin-inline:auto}
 
 .foot{
@@ -232,6 +236,7 @@ a{color:inherit;text-decoration:none}
 }
 .foot nav{display:flex;gap:18px}
 .foot a{text-decoration:underline;text-underline-offset:3px}
+.foot nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
 
 @@MEDIA@@
 /* treatment card CTA */
