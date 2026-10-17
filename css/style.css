@@ -81,6 +81,9 @@ button,.btn,.top__call,.card__cta,.qa summary{-webkit-user-select:none;user-sele
   max-width:min(92vw,640px);
   opacity:0;transform:translateY(24px);
 }
+/* without JS nothing would ever fade the copy in */
+html:not(.js) .hero__copy{opacity:1;transform:none}
+html:not(.js) .hero__glow{opacity:1}
 .hero__copy h1{
   font-family:var(--f-head);font-weight:700;color:var(--ink);
   font-size:clamp(1.7rem,min(7.6vw,6.2svh),3.4rem);line-height:1.15;
