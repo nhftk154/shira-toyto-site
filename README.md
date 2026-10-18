@@ -23,6 +23,9 @@ python3 -m http.server 5173
 
 **עבודה מקומית בלי התחברות:** `local_backend: true` ב-`config.yml`. פותחים את `/admin` מהשרת המקומי ובוחרים "עבודה עם תיקייה מקומית".
 
+## תוכן סטטי לסורקים (prerender)
+האתר מציג את התוכן מ-`content/*.json` בדפדפן (`js/content.js`), אבל סורקים שלא מריצים JS (רוב סורקי ה-AI) היו רואים עמוד כמעט ריק. לכן `scripts/prerender.mjs` שומר עותק סטטי של אותו תוכן ב-`index.html`. אחרי עריכה ב-/admin, ה-GitHub Action מעדכן את `index.html` בקומיט נוסף של `github-actions[bot]`. הדפדפן ממשיך להציג תמיד את ה-JSON העדכני, גם אם ה-Action עוד לא רץ.
+
 ## פרסום (חד-פעמי)
 1. ליצור ריפו `nhftk154/shira-toyto-site` ב-GitHub ולדחוף אליו את התיקייה.
 2. להפעיל GitHub Pages (Settings, Pages, branch main).
@@ -31,7 +34,7 @@ python3 -m http.server 5173
 
 ## נשאר לעשות
 - [ ] **ממצאי ביקורת עיצוב ו-GEO שנדחו** (פירוט מלא ב-`REVIEW.md`):
-  - [ ] **prerender של התוכן (G1, חשוב):** כל התוכן נטען ב-JS מ-`content/*.json`, וסורקי AI לא רואים אותו. פתרון: סקריפט Node + GitHub Action שמזריקים את התוכן ל-HTML בכל קומיט של ה-CMS.
+  - [x] **prerender של התוכן (G1):** `scripts/prerender.mjs` מזריק את `content/*.json` ל-`index.html`, ו-`.github/workflows/prerender.yml` מריץ אותו אוטומטית כשתוכן משתנה ב-main. להרצה ידנית: `node scripts/prerender.mjs`. המלצות, גלריה וסרטונים לא נכללים בכוונה.
   - [ ] **JSON-LD מלא (G3):** `Person`, `sameAs`, כתובת מלאה ו-`FAQPage`. לאשר קודם עם שירה שהכתובת יכולה להופיע בנתוני מכונה.
   - [ ] **דומיין מותאם (G2):** `robots.txt`, `sitemap.xml` ו-`llms.txt` בתת-נתיב של github.io לא נקראים על ידי סורקים. `llms.txt` עדיין לא קיים (404).
   - [ ] **תוכן מצד שירה (G4-G7):** הסמכות, שאלות ותשובות נוספות (מחיר, אורך מפגש, מה זה עין הבדולח), איות אחיד ("תרפיה", "כלי-ניקה"), וקיצור הכותרת של הטיפול הראשון.

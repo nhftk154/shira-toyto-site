@@ -30,6 +30,9 @@ window.contentReady = (async () => {
       $('aboutPhoto').classList.remove('is-logo');
       $('aboutPhoto').classList.add('is-photo');
     }
+    $('chips').replaceChildren();   // index.html is prerendered (scripts/prerender.mjs); rebuild from the live JSON
+    $('stats').replaceChildren();
+    $('einBody').replaceChildren();
     (about.tags || []).forEach(t => $('chips').append(el('li', null, typeof t === 'string' ? t : t.tag)));
     (about.stats || []).forEach(s => {
       const box = el('div', 'stat');
@@ -68,6 +71,7 @@ window.contentReady = (async () => {
   }
 
   /* ---- treatments rail ---- */
+  $('rail').replaceChildren();
   items(treatments).forEach((t, i) => {
     const c = el('article', 'card');
     c.setAttribute('role', 'listitem');
@@ -87,6 +91,7 @@ window.contentReady = (async () => {
 
   /* pagination dots for the treatments rail */
   const dots = $('railDots');
+  dots.replaceChildren();
   const cards = [...rail.children];
   if (cards.length > 1) {
     cards.forEach((c, i) => {
@@ -112,6 +117,7 @@ window.contentReady = (async () => {
   }
 
   /* ---- credentials (hidden until at least one is added) ---- */
+  $('credList').replaceChildren();
   const cr = items(credentials).filter(c => c && c.title);
   cr.forEach(c => {
     const li = el('li', 'cred__i reveal');
@@ -122,6 +128,7 @@ window.contentReady = (async () => {
   if (cr.length) $('credentials').hidden = false;
 
   /* ---- process ---- */
+  $('steps').replaceChildren();
   items(process).forEach((s, i) => {
     const li = el('li', 'step reveal');
     li.append(el('span', 'step__n', String(i + 1)), el('div', 'step__b'));
@@ -130,6 +137,7 @@ window.contentReady = (async () => {
   });
 
   /* ---- faq ---- */
+  $('faqList').replaceChildren();
   items(faq).forEach(f => {
     const d = el('details', 'qa reveal');
     d.append(el('summary', null, f.q), el('p', null, f.a));
