@@ -1,0 +1,36 @@
+# Keeps index.html's static copy of the content (for crawlers that do not run JS) in sync
+# with content/*.json whenever the CMS (or anyone) changes the content on main.
+name: Prerender content
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/**'
+      - 'scripts/prerender.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prerender:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/prerender.mjs
+      - name: Commit if index.html changed
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "build: prerender content into index.html"
+          git pull --rebase origin main
+          git push origin HEAD:main
