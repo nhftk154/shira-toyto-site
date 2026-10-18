@@ -153,17 +153,17 @@
     scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.5 }
   });
 
-  /* ---------- section reveals: build in while scrolling down, fade back out when scrolling up ---------- */
+  /* ---------- section reveals: build in once while scrolling down (they stay when scrolling back up) ---------- */
   (window.contentReady || Promise.resolve()).then(() => {
     gsap.utils.toArray('.reveal').forEach(n => {
       gsap.from(n, {
-        y: 34, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: n, start: 'top 90%', toggleActions: 'play none none reverse' }
+        y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: n, start: 'top 90%', toggleActions: 'play none none none' }
       });
     });
     gsap.from('.card', {
       y: 40, opacity: 0, duration: 0.8, stagger: 0.09, ease: 'power3.out',
-      scrollTrigger: { trigger: '#rail', start: 'top 88%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: '#rail', start: 'top 88%', toggleActions: 'play none none none' }
     });
     ScrollTrigger.refresh();
   });
